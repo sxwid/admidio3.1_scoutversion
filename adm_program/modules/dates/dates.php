@@ -653,13 +653,9 @@ else
             $page->addHtml('
                 </div>
                 <div class="panel-footer">'.
-                    // show information about user who created the recordset and changed it
-                    admFuncShowCreateChangeInfoByName($row['create_name'],
-                                                      $date->getValue('dat_timestamp_create'),
-                                                      $row['change_name'],
-                                                      $date->getValue('dat_timestamp_change'),
-                                                      $date->getValue('dat_usr_id_create'),
-                                                      $date->getValue('dat_usr_id_change')).'
+                    //@ptabaden change Scoutname
+                    admFuncShowCreateChangeInfoById($date->getValue('dat_usr_id_create'), $date->getValue('dat_timestamp_create'),
+                                                    $date->getValue('dat_usr_id_change'), $date->getValue('dat_timestamp_change')).'
                     </div>
                 </div>');
         }

@@ -151,8 +151,9 @@ else
             '</div>
             <div class="panel-footer">'.
                 // show information about user who creates the recordset and changed it
-                admFuncShowCreateChangeInfoByName($row['create_name'], $announcement->getValue('ann_timestamp_create'),
-                    $row['change_name'], $announcement->getValue('ann_timestamp_change'), $announcement->getValue('ann_usr_id_create'), $announcement->getValue('ann_usr_id_change')).'
+                //@ptabaden change Scoutname
+                admFuncShowCreateChangeInfoById($announcement->getValue('ann_usr_id_create'), $announcement->getValue('ann_timestamp_create'),
+                                                $announcement->getValue('ann_usr_id_change'),$announcement->getValue('ann_timestamp_change')).'
             </div>
         </div>');
     }  // Ende foreach
