@@ -18,9 +18,12 @@
                     // Module Menu
                     $moduleMenu = new Menu('modules', $gL10n->get('SYS_MODULES'));
 
-                    $moduleMenu->addItem('overview', '/adm_program/index.php',
-                                         $gL10n->get('SYS_OVERVIEW'), '/icons/home.png');
-
+                    $moduleMenu->addItem('homepage', '/adm_plugins/sts_plugin/sts.php',
+                        'Startseite', '/icons/home.png');
+                        
+                    $moduleMenu->addItem('history', '/adm_plugins/history_plugin/history.php',
+                        'Porträt', '/icons/announcements.png');
+                        
                     if($gPreferences['enable_announcements_module'] == 1
                     || ($gPreferences['enable_announcements_module'] == 2 && $gValidLogin))
                     {
