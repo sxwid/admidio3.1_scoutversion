@@ -29,6 +29,9 @@ $postBody       = admFuncVariableIsValid($_POST, 'msg_body', 'html');
 $postBodySQL    = admFuncVariableIsValid($_POST, 'msg_body', 'string');
 $postDeliveryConfirmation = admFuncVariableIsValid($_POST, 'delivery_confirmation', 'bool');
 $postCaptcha    = admFuncVariableIsValid($_POST, 'captcha', 'string');
+//@ptabaden change
+$postMsg_l      = admFuncVariableIsValid($_POST, 'msg_l', 'boolean');
+$postMsg_p      = admFuncVariableIsValid($_POST, 'msg_p', 'boolean');
 
 // save form data in session for back navigation
 $_SESSION['message_request'] = $_POST;
@@ -198,9 +201,23 @@ if ($getMsgType === 'EMAIL')
                     $sqlConditions = ' AND mem_begin  <= \''.DATE_NOW.'\'
                                        AND mem_end     > \''.DATE_NOW.'\' ';
                 }
+                
+                // @ptabaden change leitermail
+                if($postMsg_l == false && $postMsg_p == true )
+                {
+                    $sqlConditions .= ' AND leader.usd_value = 0 '; 
+                }
+                elseif($postMsg_l == true && $postMsg_p == false )
+                {
+                    $sqlConditions .= ' AND leader.usd_value = 1 ';
+                }
+                elseif($postMsg_l == false && $postMsg_p == false )
+                {
+                    $gMessage->show($gL10n->get('MAI_ROLE_NO_EMAILS'));
+                }
 
                 $sql = 'SELECT first_name.usd_value as first_name, last_name.usd_value as last_name,
-                               email.usd_value as email, rol_name
+                               email.usd_value as email, rol_name, leader.usd_value as leader
                           FROM '.TBL_MEMBERS.'
                     INNER JOIN '.TBL_ROLES.'
                             ON rol_id = mem_rol_id
@@ -220,6 +237,9 @@ if ($getMsgType === 'EMAIL')
                      LEFT JOIN '.TBL_USER_DATA.' as first_name
                             ON first_name.usd_usr_id = usr_id
                            AND first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
+                     LEFT JOIN '.TBL_USER_DATA.' as leader
+                            ON leader.usd_usr_id = usr_id
+                           AND leader.usd_usf_id = '. $gProfileFields->getProperty('LEITER', 'usf_id'). '
                          WHERE rol_id      = '.$group[0].'
                            AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
                                OR cat_org_id IS NULL )

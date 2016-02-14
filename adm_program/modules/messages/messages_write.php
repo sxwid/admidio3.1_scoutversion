@@ -174,6 +174,9 @@ else
     $form_values['subject']     = $getSubject;
     $form_values['msg_body']    = '';
     $form_values['msg_to']      = 0;
+    //@ptabaden change leitermail
+    $form_values['msg_l']  = true;
+    $form_values['msg_p']  = true;
     $form_values['carbon_copy'] = $getCarbonCopy;
     $form_values['delivery_confirmation'] = $getDeliveryConfirmation;
 }
@@ -436,6 +439,14 @@ elseif (!isset($messageStatement))
                                                                       'helpTextIdLabel'        => 'MAI_SEND_MAIL_TO_ROLE',
                                                                       'defaultValue'           => $preloadData));
 
+    // @ptabaden change Checkboxes
+    // todo nur bei terminen?
+    if(isLeiter($gCurrentUser->getValue('usr_id'))==true)
+    {    
+        $form->addCheckbox('msg_l', "An Leiter", $form_values['msg_l']);
+        $form->addCheckbox('msg_p', "An TN", $form_values['msg_p']);
+    }
+    
     $form->addLine();
 
     if ($gCurrentUser->getValue('usr_id') > 0)
