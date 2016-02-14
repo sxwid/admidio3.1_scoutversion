@@ -55,7 +55,14 @@ try
         case 'usf_description':
             $folderName = 'user_fields';
             break;
-    }
+            //ptabaden change plugins
+        case 'hist_description':
+            $folderName = 'history';
+            break;
+        case 'sts_description':
+            $folderName = 'sts';
+            break;
+            }
 
     // set path to module folder in adm_my_files
     $myFilesProfilePhotos = new MyFiles($folderName);

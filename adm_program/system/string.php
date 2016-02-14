@@ -66,7 +66,10 @@ function admStrStripTagsSpecial($srcArray)
         && $key !== 'plugin_CKEditor'
         && $key !== 'room_description'
         && $key !== 'usf_description'
-        && $key !== 'mail_smtp_password')
+        && $key !== 'mail_smtp_password'
+        //@ptabaden change plugins
+        && $key !== 'hist_description' 
+        && $key !== 'sts_description')
         {
             $srcArray[$key] = strStripTags($value);
         }
