@@ -8,7 +8,74 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
+/** @ptabaden change
+ *  Function checks if the user is "Leiter"
+ *  @param $userId The id of the user who should be checked if he is a group leader
+ *  @return Returns @b true if the user is a "Leiter"
+ */
+function isLeiter($userId)
+{
+    global $gProfileFields, $gDb;
 
+    if(is_numeric($userId) && $userId >  0)
+    {
+        $sql   = 'SELECT usd_value FROM '. TBL_USER_DATA. ' WHERE usd_usf_id='. $gProfileFields->getProperty('LEITER', 'usf_id'). ' AND usd_usr_id = '.$userId;
+        $result = $gDb->query($sql);
+        $row = $gDb->fetch_array($result);
+        if ($row['usd_value']==1)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    return false;
+}
+
+/** @ptabaden change
+ *  Function returns Scoutname (if any), else Pre- and Surname
+ *  @param $userId The id of the user
+ *  @return Returns either Scoutname or (if non existant) Prename Surname
+ */
+function getScoutName($userId)
+{
+    global $gCurrentOrganization, $gProfileFields, $gDb;
+
+    if(is_numeric($userId) && $userId >  0)
+    {
+        $sql   = 'SELECT usd_value
+                    FROM '. TBL_USER_DATA. '
+                    WHERE usd_usr_id = '.$userId.'
+                      AND usd_usf_id = '. $gProfileFields->getProperty('PFADINAME', 'usf_id');
+
+        $result = $gDb->query($sql);         
+        $pfadiname = $gDb->fetch_array($result)['usd_value'];
+        if(strlen($pfadiname)!=0)
+        {
+            return $pfadiname;
+        }
+        else
+        {
+            $sql = 'SELECT *, firstname.usd_value || \' \' || surname.usd_value as create_name
+                    FROM '. TBL_USER_DATA. '
+                    LEFT JOIN '. TBL_USER_DATA .' surname
+                        ON surname.usd_usr_id = '.$userId.'
+                        AND surname.usd_usf_id = '.$gProfileFields->getProperty('LAST_NAME', 'usf_id').'
+                    LEFT JOIN '. TBL_USER_DATA .' firstname
+                        ON firstname.usd_usr_id = '.$userId.'
+                        AND firstname.usd_usf_id = '.$gProfileFields->getProperty('FIRST_NAME', 'usf_id');              
+                       
+            $result = $gDb->query($sql);         
+            $normaloname = $gDb->fetch_array($result)['create_name'];
+            return $normaloname;
+        }
+        
+        
+    }
+}
+ 
 /**
  * Autoloading function of class files. This function will be later registered
  * for default autoload implementation. Therefore the class name must be the same
@@ -602,7 +669,7 @@ function admFuncShowCreateChangeInfoById($userIdCreated, $timestampCreate, $user
 
                 if($gPreferences['system_show_create_edit'] == 1)
                 {
-                    $htmlCreateName = $userCreate->getValue('FIRST_NAME'). ' '. $userCreate->getValue('LAST_NAME');
+                    $htmlCreateName = getScoutName($userIdCreated);
                 }
                 else
                 {
@@ -624,7 +691,7 @@ function admFuncShowCreateChangeInfoById($userIdCreated, $timestampCreate, $user
 
                 if($gPreferences['system_show_create_edit'] == 1)
                 {
-                    $htmlEditName = $userEdit->getValue('FIRST_NAME') . ' ' . $userEdit->getValue('LAST_NAME');
+                    $htmlCreateName = getScoutName($userIdEdited);
                 }
                 else
                 {
