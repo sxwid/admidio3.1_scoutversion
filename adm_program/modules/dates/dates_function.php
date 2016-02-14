@@ -475,8 +475,15 @@ elseif($getMode === 2)  // Termin loeschen
 elseif($getMode === 3)  // Benutzer zum Termin anmelden
 {
     $member = new TableMembers($gDb);
-    $member->startMembership($date->getValue('dat_rol_id'), $gCurrentUser->getValue('usr_id'));
-
+    //@ptabaden change Prüfe ob User Leiterflag hat
+    if (isLeiter($gCurrentUser->getValue('usr_id')) == true)
+    {
+        $member->startMembership($date->getValue('dat_rol_id'), $gCurrentUser->getValue('usr_id'),1);        
+    } 
+    else
+    {
+        $member->startMembership($date->getValue('dat_rol_id'), $gCurrentUser->getValue('usr_id'));
+    }
     $gMessage->setForwardUrl($gNavigation->getUrl());
     $gMessage->show($gL10n->get('DAT_ATTEND_DATE', $date->getValue('dat_headline'), $date->getValue('dat_begin')), $gL10n->get('DAT_ATTEND'));
 }
