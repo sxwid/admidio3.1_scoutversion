@@ -478,7 +478,7 @@ elseif($getMode === 3)  // Benutzer zum Termin anmelden
     //@ptabaden change Prüfe ob User Leiterflag hat
     if (isLeiter($gCurrentUser->getValue('usr_id')) == true)
     {
-        $member->startMembership($date->getValue('dat_rol_id'), $gCurrentUser->getValue('usr_id'),1);        
+        $member->startMembership($date->getValue('dat_rol_id'), $gCurrentUser->getValue('usr_id'),true);        
     } 
     else
     {
