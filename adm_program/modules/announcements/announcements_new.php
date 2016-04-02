@@ -40,7 +40,8 @@ if($getAnnId > 0)
 }
 else
 {
-    $headline = $gL10n->get('SYS_CREATE_VAR', $gL10n->get('ANN_ANNOUNCEMENT'));
+    // @ptabaden: added Value, without translation!
+    $headline = '<div>Neuigkeit eintragen</div>';
 }
 
 // add current url to navigation stack
@@ -72,8 +73,9 @@ if(isset($_SESSION['announcements_request']))
 $page = new HtmlPage($headline);
 
 // add back link to module menu
+// @ptabaden: deleted icon -> To be changed
 $announcementsMenu = $page->getMenu();
-$announcementsMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+$announcementsMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), '<i class="fa fa-arrow-left" alt="'.$gL10n->get('SYS_BACK').'" title="'.$gL10n->get('SYS_BACK').'"></i><div class="iconDescription">'.$gL10n->get('SYS_BACK').'</div>', '');
 
 // show form
 $form = new HtmlForm('announcements_edit_form', $g_root_path.'/adm_program/modules/announcements/announcements_function.php?ann_id='.$getAnnId.'&amp;headline='. $getHeadline. '&amp;mode=1', $page);

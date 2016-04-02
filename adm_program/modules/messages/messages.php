@@ -58,7 +58,8 @@ $EmailMenu = $page->getMenu();
 // link to write new email
 if ($gPreferences['enable_mail_module'] == 1)
 {
-    $EmailMenu->addItem('admMenuItemNewEmail', $g_root_path.'/adm_program/modules/messages/messages_write.php', $gL10n->get('MAI_SEND_EMAIL'), '/email.png');
+    // @ptabaden: changed icon
+    $EmailMenu->addItem('admMenuItemNewEmail', $g_root_path.'/adm_program/modules/messages/messages_write.php', '<i class="fa fa-pencil-square-o" alt="'.$gL10n->get('MAI_SEND_EMAIL').'" title="'.$gL10n->get('MAI_SEND_EMAIL').'"></i><div class="iconDescription">'.$gL10n->get('MAI_SEND_EMAIL').'</div>', '');
 }
 // link to write new PM
 if ($gPreferences['enable_pm_module'] == 1)
@@ -67,30 +68,33 @@ if ($gPreferences['enable_pm_module'] == 1)
 }
 
 // link to Chat
-if ($gPreferences['enable_chat_module'] == 1)
-{
-    $EmailMenu->addItem('admMenuItemNewChat', $g_root_path.'/adm_program/modules/messages/messages_chat.php', $gL10n->get('MSG_CHAT'), '/chat.png');
-}
+// @ptabaden: hide chat!
+// if ($gPreferences['enable_chat_module'] == 1)
+// {
+//    $EmailMenu->addItem('admMenuItemNewChat', $g_root_path.'/adm_program/modules/messages/messages_chat.php', $gL10n->get('MSG_CHAT'), '/chat.png');
+// }
 
 if($gCurrentUser->isWebmaster())
 {
+    // @ptabaden: Changed Icon & renamed to menu_item_preferences
     $EmailMenu->addItem('admMenuItemPreferences', $g_root_path.'/adm_program/modules/preferences/preferences.php?show_option=messages',
-                    $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');
+                    '<i class="fa fa-cog" alt="'.$gL10n->get('SYS_MODULE_PREFERENCES').'" title="'.$gL10n->get('SYS_MODULE_PREFERENCES').'"></i><div class="iconDescription">'.$gL10n->get('SYS_MODULE_PREFERENCES').'</div>', '', 'right');
 }
 
 $table = new HtmlTable('adm_lists_table', $page, true, true);
 
-$table->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'right'));
-
-$table->addRowHeadingByArray(array('<img class="admidio-icon-info" src="'. THEME_PATH. '/icons/email.png" alt="'.$gL10n->get('SYS_CATEGORY').'" title="'.$gL10n->get('SYS_CATEGORY').'" />',
+// @ptabaden deleted two cols #possibleError delete one left more?
+$table->setColumnAlignByArray(array('left', 'left', 'right'));
+// @ptabaden: deleted category row and changed order
+// @ptabaden: deleted two cols
+$table->addRowHeadingByArray(array($gL10n->get('MSG_OPPOSITE'),
                                    $gL10n->get('MAI_SUBJECT'),
-                                   $gL10n->get('MSG_OPPOSITE'),
-                                   $gL10n->get('SYS_DATE'),
                                    ''));
 $table->disableDatatablesColumnsSort(5);
 $key = 0;
 $part1 = '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=msg&amp;element_id=row_message_';
-$part2 = '"><img src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('MSG_REMOVE').'" title="'.$gL10n->get('MSG_REMOVE').'" /></a>';
+// @ptabaden: Changed Icon
+$part2 = '"><i class="fa fa-times" alt="'.$gL10n->get('MSG_REMOVE').'" title="'.$gL10n->get('MSG_REMOVE').'" /></a>';
 $href  = 'href="'.$g_root_path.'/adm_program/modules/messages/messages_write.php?msg_id=';
 
 // open some additonal functions for messages
@@ -137,11 +141,9 @@ if(isset($statement))
         ++$key;
 
         $messageAdministration = $part1 . $key . '&amp;name='.urlencode($message->getValue('msg_subject')).'&amp;database_id=' . $message->getValue('msg_id') . $part2;
-
-        $table->addRowByArray(array('<a class="admidio-icon-link" '. $href . $message->getValue('msg_id') .'">
-                <img class="admidio-icon-info" src="'. THEME_PATH. '/icons/email.png" alt="'.$gL10n->get('SYS_EMAIL').'" title="'.$gL10n->get('SYS_EMAIL').'" />',
-                '<a '. $href .$message->getValue('msg_id').'">'.$message->getValue('msg_subject').'</a>',
-                $ReceiverName, $message->getValue('msg_timestamp'), $messageAdministration), 'row_message_'.$key);
+	// @ptabaden: changed order and icons, changed order, delted two cols
+        $table->addRowByArray(array('<h4 id="mail_timestamp">'.$message->getValue('msg_timestamp').'</h4><div id="mail" class="table_group"><h4 id="mail_receiver">'.$gL10n->get('MSG_OPPOSITE').': '.$ReceiverName.'</h4><h3 id="event_title"><a '. $href .$message->getValue('msg_id').'">'.$message->getValue('msg_subject').'</a></h3></div>', $messageAdministration),
+                'row_message_'.$key);
     }
 }
 

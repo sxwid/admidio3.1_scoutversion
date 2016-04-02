@@ -188,8 +188,9 @@ $page = new HtmlPage($headline);
 $gNavigation->addUrl(CURRENT_URL, $headline);
 
 // add back link to module menu
+// @ptabaden: Changed Icon
 $messagesWriteMenu = $page->getMenu();
-$messagesWriteMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+$messagesWriteMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), '<i class="fa fa-arrow-left" alt="'.$gL10n->get('SYS_BACK').'" title="'.$gL10n->get('SYS_BACK').'"></i><div class="iconDescription">'.$gL10n->get('SYS_BACK').'</div>', '');
 
 if ($getMsgType === 'PM')
 {
@@ -235,7 +236,8 @@ if ($getMsgType === 'PM')
 
     $form->closeGroupBox();
 
-    $form->addSubmitButton('btn_send', $gL10n->get('SYS_SEND'), array('icon' => THEME_PATH.'/icons/email.png'));
+    // @ptabaden: changed icon?
+    $form->addSubmitButton('btn_send', '<i class="fa fa-paper-plane" alt="'.$gL10n->get('SYS_SEND').'" title="'.$gL10n->get('SYS_SEND').'"></i>'.'<div id="icon-text">'.$gL10n->get('SYS_SEND').'</div>', '');
 
     // add form to html page
     $page->addHtml($form->show(false));
@@ -278,8 +280,9 @@ elseif (!isset($messageStatement))
     }
 
     // show form
+    // @ptabaden: Added h3
     $form = new HtmlForm('mail_send_form', $g_root_path.'/adm_program/modules/messages/messages_send.php?'.$formParam, $page, array('enableFileUpload' => true));
-    $form->openGroupBox('gb_mail_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
+    $form->openGroupBox('gb_mail_contact_details', '<h3>'.$gL10n->get('SYS_CONTACT_DETAILS').'</h3>');
 
     $preloadData = array();
     $sqlRoleIds  = '';
@@ -477,8 +480,8 @@ elseif (!isset($messageStatement))
                      WHERE usr_id = '. $gCurrentUser->getValue('usr_id'). '
                        AND usr_valid   = 1
                   GROUP BY email.usd_value, email.usd_value';
-
-            $form->addSelectBoxFromSql('mailfromid', $gL10n->get('MAI_YOUR_EMAIL'), $gDb, $sql, array('maxLength' => 50, 'defaultValue' => $gCurrentUser->getValue('EMAIL'), 'showContextDependentFirstEntry' => false));
+            // @πtabaden: Changed in reference to 3.1.2
+            $form->addSelectBoxFromSql('mailfrom', $gL10n->get('MAI_YOUR_EMAIL'), $gDb, $sql, array('maxLength' => 50, 'defaultValue' => $gCurrentUser->getValue('EMAIL'), 'showContextDependentFirstEntry' => false));
         }
         else
         {
@@ -504,8 +507,8 @@ elseif (!isset($messageStatement))
     }
 
     $form->closeGroupBox();
-
-    $form->openGroupBox('gb_mail_message', $gL10n->get('SYS_MESSAGE'));
+    // @ptabaden: Added h3
+    $form->openGroupBox('gb_mail_message', '<h3>'.$gL10n->get('SYS_MESSAGE').'</h3>');
     $form->addInput('subject', $gL10n->get('MAI_SUBJECT'), $form_values['subject'], array('maxLength' => 77, 'property' => FIELD_REQUIRED));
 
     // Nur eingeloggte User duerfen Attachments anhaengen...
@@ -520,7 +523,7 @@ elseif (!isset($messageStatement))
     // add textfield or ckeditor to form
     if($gValidLogin && $gPreferences['mail_html_registered_users'] == 1)
     {
-        $form->addEditor('msg_body', null, $form_values['msg_body'], array('property' => FIELD_REQUIRED));
+        $form->addEditor('msg_body', null, $form_values['msg_body'], array(''));
     }
     else
     {
@@ -530,14 +533,16 @@ elseif (!isset($messageStatement))
     $form->closeGroupBox();
 
     // if captchas are enabled then visitors of the website must resolve this
+    // @ptabaden: Added h3
     if (!$gValidLogin && $gPreferences['enable_mail_captcha'] == 1)
     {
-        $form->openGroupBox('gb_confirmation_of_input', $gL10n->get('SYS_CONFIRMATION_OF_INPUT'));
+        $form->openGroupBox('gb_confirmation_of_input', '<h3>'.$gL10n->get('SYS_CONFIRMATION_OF_INPUT').'</h3>');
         $form->addCaptcha('captcha', $gPreferences['captcha_type']);
         $form->closeGroupBox();
     }
 
-    $form->addSubmitButton('btn_send', $gL10n->get('SYS_SEND'), array('icon' => THEME_PATH.'/icons/email.png'));
+    // @ptabaden: changed icon
+    $form->addSubmitButton('btn_send', '<i class="fa fa-paper-plane" alt="'.$gL10n->get('SYS_SEND').'" title="'.$gL10n->get('SYS_SEND').'"></i><div id="icon-text">'.$gL10n->get('SYS_SEND').'</div>', array(''));
 
     // add form to html page and show page
     $page->addHtml($form->show(false));
@@ -545,7 +550,8 @@ elseif (!isset($messageStatement))
 
 if (isset($messageStatement))
 {
-    $page->addHtml('<br>');
+    // @ptabaden: removed br
+    $page->addHtml('');
     while ($row = $messageStatement->fetch())
     {
         if ($row['msc_usr_id'] == $gCurrentUser->getValue('usr_id'))
@@ -601,23 +607,17 @@ if (isset($messageStatement))
             }
             $receiverName = '<div class="panel-footer">'.$gL10n->get('MSG_OPPOSITE').': '.substr($receiverName, 2).'</div>';
         }
-
+		// @ptabaden: Changed order of message display; removed $sentUser because obviou; renamed to panel-primary, removed bottom receivername 
         $date = new DateTimeExtended($row['msc_timestamp'], 'Y-m-d H:i:s');
         $page->addHtml('
-        <div class="panel panel-default">
+        <div class="panel panel-primary">
             <div class="panel-heading">
-                <div class="row">
-                    <div class="col-sm-8">
-                        <img class="admidio-panel-heading-icon" src="'. THEME_PATH. '/icons/guestbook.png" alt="'.$sentUser.'" />' . $sentUser . '
-                    </div>
-                    <div class="col-sm-4 text-right">' . $date->format($gPreferences['system_date'].' '.$gPreferences['system_time']) .
-                    '</div>
-                </div>
+            	<h3>'.$ReceiverName.'</h3>
+            	<h4>'.$date->format($gPreferences['system_date'].' '.$gPreferences['system_time']).'</h4>
             </div>
             <div class="panel-body">'.
                 $messageText.'
             </div>
-            '.$receiverName.'
         </div>');
     }
 }

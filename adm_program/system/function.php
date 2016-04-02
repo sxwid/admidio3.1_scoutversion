@@ -758,8 +758,9 @@ function admFuncShowCreateChangeInfoByName($userNameCreated, $timestampCreate, $
             $html .= '<span class="admidio-info-created">'.$gL10n->get('SYS_CREATED_BY', $userNameCreated, $timestampCreate).'</span>';
         }
 
+        // @ptabaden: Commented out
         // compose name of user who edit the recordset
-        if(strlen($timestampEdited) > 0)
+        /*if(strlen($timestampEdited) > 0)
         {
             $userNameEdited = trim($userNameEdited);
 
@@ -776,7 +777,7 @@ function admFuncShowCreateChangeInfoByName($userNameCreated, $timestampCreate, $
             }
 
             $html .= '<span class="info-edited">'.$gL10n->get('SYS_LAST_EDITED_BY', $userNameEdited, $timestampEdited).'</span>';
-        }
+        }*/
 
         if($html !== '')
         {

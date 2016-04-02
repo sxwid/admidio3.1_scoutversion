@@ -24,7 +24,7 @@ require_once(SERVER_PATH. '/adm_plugins/sts_plugin/sts_classes.php');
 unset($_SESSION['sts_request']);
 
 // Initialize and check the parameters
-$getHeadline = 'Startseite';
+$getHeadline = $gL10n->get('SYS_OVERVIEW');
 $getId       = '1';
 
 // create object for announcements
@@ -55,7 +55,7 @@ if($gCurrentUser->isWebmaster())
 
     // show link to edit Startseite
     $stsMenu->addItem('menu_item_edit_sts', $g_root_path.'/adm_plugins/sts_plugin/sts_edit.php?sts_id='.$getId.'&amp;?headline='.$getHeadline, 
-                                $gL10n->get('SYS_EDIT_VAR', $getHeadline), '');
+                                '<i class="fa fa-pencil" alt="'.$gL10n->get('SYS_EDIT_VAR', $getHeadline).'" title="'.$gL10n->get('SYS_EDIT_VAR', $getHeadline).'"></i><div class="iconDescription">Text bearbeiten</div>', '');
 }
 
 // Output Database Entry if available

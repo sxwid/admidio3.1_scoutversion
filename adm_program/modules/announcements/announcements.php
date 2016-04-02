@@ -79,15 +79,17 @@ $announcementsMenu = $page->getMenu();
 if($gCurrentUser->editAnnouncements())
 {
     // show link to create new announcement
-    $announcementsMenu->addItem('menu_item_new_announcement', $g_root_path.'/adm_program/modules/announcements/announcements_new.php?headline='.$getHeadline,
-                                $gL10n->get('SYS_CREATE_VAR', $getHeadline), 'add.png');
+    // @ptabaden: changed icons
+    $announcementsMenu->addItem('menu_item_new_announcement', $g_root_path.'/adm_program/modules/announcements/announcements_new.php?headline='.$getHeadline, 
+                                '<i class="fa fa-plus" alt="'.$gL10n->get('SYS_CREATE_VAR').'" title="'.$gL10n->get('SYS_CREATE_VAR').'"></i><div class="iconDescription">Neue Meldung</div>', '');
 }
 
 if($gCurrentUser->isWebmaster())
 {
     // show link to system preferences of announcements
-    $announcementsMenu->addItem('menu_item_preferences', $g_root_path.'/adm_program/modules/preferences/preferences.php?show_option=announcements',
-                                $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');
+    // @ptabaden: changed icons
+    $announcementsMenu->addItem('menu_item_preferences', $g_root_path.'/adm_program/modules/preferences/preferences.php?show_option=announcements', 
+                                '<i class="fa fa-cog" alt="'.$gL10n->get('SYS_MODULE_PREFERENCES').'" title="'.$gL10n->get('SYS_MODULE_PREFERENCES').'"></i><div class="iconDescription">'.$gL10n->get('SYS_MODULE_PREFERENCES').'</div>', '', 'right');
 }
 
 if($announcementsCount === 0)
@@ -116,33 +118,33 @@ else
         $page->addHtml('
         <div class="panel panel-primary" id="ann_'.$announcement->getValue('ann_id').'">
             <div class="panel-heading">
-                <div class="pull-left">
-                    <img class="admidio-panel-heading-icon" src="'. THEME_PATH. '/icons/announcements.png" alt="'. $announcement->getValue('ann_headline'). '" />'.
+                <h2>'.
                     $announcement->getValue('ann_headline'). '
-                </div>
-                <div class="pull-right text-right">'.$announcement->getValue('ann_timestamp_create', $gPreferences['system_date']));
-
+                </h2>
+                <div class="date-info"><h4>'.$announcement->getValue('ann_timestamp_create', $gPreferences['system_date']).'<div class="date-actions">');
+                    
                     // aendern & loeschen duerfen nur User mit den gesetzten Rechten
                     if($gCurrentUser->editAnnouncements())
                     {
                         if($announcement->editRight())
                         {
+                            // @ptabaden: changed icons
                             $page->addHtml('
-                            <a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/announcements/announcements_new.php?ann_id='. $announcement->getValue('ann_id'). '&amp;headline='.$getHeadline.'"><img
-                                src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>');
+                            <a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/announcements/announcements_new.php?ann_id='. $announcement->getValue('ann_id'). '&amp;headline='.$getHeadline.'"><i class="fa fa-pencil" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'"></i></a>');
+                                
                         }
 
                         // Loeschen darf man nur Ankuendigungen der eigenen Gliedgemeinschaft
+			// @ptabaden: changed icons
                         if($announcement->getValue('ann_org_id') == $gCurrentOrganization->getValue('org_id'))
                         {
                             $page->addHtml('
                             <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
                                 href="'.$g_root_path.'/adm_program/system/popup_message.php?type=ann&amp;element_id=ann_'.
-                                $announcement->getValue('ann_id').'&amp;name='.urlencode($announcement->getValue('ann_headline')).'&amp;database_id='.$announcement->getValue('ann_id').'"><img
-                                src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>');
-                        }
+                                $announcement->getValue('ann_id').'&amp;name='.urlencode($announcement->getValue('ann_headline')).'&amp;database_id='.$announcement->getValue('ann_id').'"><i class="fa fa-times" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'"></i></a>');
+                        }    
                     }
-                $page->addHtml('</div>
+                $page->addHtml('</div></h4></div>
             </div>
 
             <div class="panel-body">'.

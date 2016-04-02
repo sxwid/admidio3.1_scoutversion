@@ -83,17 +83,10 @@ if($getMode === 1)
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('ORG_VALUE_LIST')));
     }
-
-    if($_POST['usf_icon'] !== '')
+    // @ptabaden: Change Bugfix 3.1.2
+    if($_POST['usf_icon'] !== '' && !strValidCharacters($_POST['usf_icon'], 'url'))
     {
-        try
-        {
-            admStrIsValidFileName($_POST['usf_icon']);
-        }
-        catch(AdmException $e)
-        {
-            $e->showHtml();
-        }
+        $gMessage->show($gL10n->get('SYS_URL_INVALID_CHAR', $gL10n->get('SYS_ICON')));
     }
 
     if($_POST['usf_url'] !== '' && !strValidCharacters($_POST['usf_url'], 'url'))

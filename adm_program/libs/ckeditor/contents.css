@@ -3,25 +3,106 @@ Copyright (c) 2003-2015, CKSource - Frederico Knabben. All rights reserved.
 For licensing, see LICENSE.md or http://ckeditor.com/license
 */
 
+/* @ptabaden: changes to match ptabaden theme*/
+
+@font-face {
+    font-family: 'pta_handbold';
+    src: url('../../../adm_themes/ptabaden/font/PTA_Hand/pta_hand_sm-webfont.eot');
+    src: url('../../../adm_themes/ptabaden/font/PTA_Hand/pta_hand_sm-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../../../adm_themes/ptabaden/font/PTA_Hand/pta_hand_sm-webfont.woff2') format('woff2'),
+         url('../../../adm_themes/ptabaden/font/PTA_Hand/pta_hand_sm-webfont.woff') format('woff'),
+         url('../../../adm_themes/ptabaden/font/PTA_Hand/pta_hand_sm-webfont.ttf') format('truetype'),
+         url('../../../adm_themes/ptabaden/font/PTA_Hand/pta_hand_sm-webfont.svg#pta_handbold') format('svg');
+    font-weight: normal, bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'pta_simplon_norm_bold';
+    src: url('../../../adm_themes/ptabaden/font/SimplonNorm-Bold-Web/S/SimplonNorm-Bold-WebS.eot');
+    src: url('../../../adm_themes/ptabaden/font/SimplonNorm-Bold-Web/S/SimplonNorm-Bold-WebS.eot?#iefix') format('embedded-opentype'),
+         url('../../../adm_themes/ptabaden/font/SimplonNorm-Bold-Web/S/SimplonNorm-Bold-WebS.woff2') format('woff2'),
+         url('../../../adm_themes/ptabaden/font/SimplonNorm-Bold-Web/S/SimplonNorm-Bold-WebS.woff') format('woff'),
+         url('../../../adm_themes/ptabaden/font/SimplonNorm-Bold-Web/S/SimplonNorm-Bold-WebS.ttf') format('truetype'),
+         url('../../../adm_themes/ptabaden/font/SimplonNorm-Bold-Web/S/SimplonNorm-Bold-WebS.svg') format('svg');
+    font-weight: normal, bold;
+    font-style: normal;
+}
+
 body
 {
 	/* Font */
-	font-family: sans-serif, Arial, Verdana, "Trebuchet MS";
-	font-size: 12px;
+	/*font-family: sans-serif, Arial, Verdana, "Trebuchet MS";
+	font-size: 12px;*/
 
 	/* Text color */
-	color: #333;
+/*	color: #333;*/
 
 	/* Remove the background color to make it transparent */
-	background-color: #fff;
-
+/*	background-color: #fff;*/
+	font-family: 'Roboto', sans-serif;
+	font-weight: 400;
+	font-size: 18px;
+	line-height: 32px;
+	color: #333;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	text-rendering: geometricPrecision;
 	margin: 20px;
 }
 
+/**************************************************/
+/* Headlines */
+/**************************************************/
+
+h1, h2, h3, h4  {
+    color: #cf171a !important;
+   	font: bold 1em/1.1em "pta_handbold", Helvetica, sans-serif;
+   	margin: 0;
+}
+
+h1 {
+	font-size: 190%;
+	letter-spacing: 0.02em;
+	margin: 20px 0 15px 0;
+}
+
+h2 {
+    font-size: 160%;
+    letter-spacing: 0.01em;
+    padding-bottom: 3px;
+}
+
+h3 {
+	font-size: 130%;
+	margin-bottom: 10px;
+	letter-spacing: 0.02em;
+}
+
+h4 {
+	min-height: 24px;
+	font: bold 1em/1.1em "pta_simplon_norm_bold", Helvetica, sans-serif;
+}
+
+h6 {
+	margin: 0;
+}
+
+@media (max-width: 991px) {
+	h1 {
+		font-size: 160%;
+	}
+
+}
+
+/**************************************************/
+/* Other Styles */
+/**************************************************/
+
 .cke_editable
 {
-	font-size: 13px;
-	line-height: 1.6;
+	/*font-size: 13px;
+	line-height: 1.6;*/
 }
 
 blockquote
@@ -60,12 +141,12 @@ ol,ul,dl
 	/* preserved spaces for list items with text direction other than the list. (#6249,#8049)*/
 	padding: 0 40px;
 }
-
+/*
 h1,h2,h3,h4,h5,h6
 {
 	font-weight: normal;
 	line-height: 1.2;
-}
+}*/
 
 hr
 {

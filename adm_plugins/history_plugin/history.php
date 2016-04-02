@@ -55,7 +55,7 @@ if($gCurrentUser->isWebmaster())
 
     // show link to edit history
     $historyMenu->addItem('menu_item_edit_history', $g_root_path.'/adm_plugins/history_plugin/history_edit.php?hist_id='.$getId.'&amp;?headline='.$getHeadline, 
-                                $gL10n->get('SYS_EDIT_VAR', $getHeadline), '');
+	'<i class="fa fa-pencil" alt="'.$gL10n->get('SYS_EDIT_VAR', $getHeadline).'" title="'.$gL10n->get('SYS_EDIT_VAR', $getHeadline).'"></i><div class="iconDescription">Text bearbeiten</div>', '');
 }
 
 // Output Database Entry if available

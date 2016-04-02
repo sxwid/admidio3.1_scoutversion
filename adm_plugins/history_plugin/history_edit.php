@@ -22,7 +22,7 @@ if(!$gCurrentUser->isWebmaster())
 
 // Initialize and check the parameters
 $getHistId    = admFuncVariableIsValid($_GET, 'hist_id', 'numeric');
-$headline = 'Geschichte editieren';
+$headline = 'PortrŠt bearbeiten';
 
 // add current url to navigation stack
 $gNavigation->addUrl(CURRENT_URL, $headline);
@@ -49,7 +49,7 @@ $page = new HtmlPage($headline);
 
 // add back link to module menu
 $historysMenu = $page->getMenu();
-$historysMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+$historysMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), '<i class="fa fa-arrow-left" alt="'.$gL10n->get('SYS_BACK').'" title="'.$gL10n->get('SYS_BACK').'"></i><div class="iconDescription">'.$gL10n->get('SYS_BACK').'</div>', '');
 
 // show form
 $form = new HtmlForm('historys_edit_form', $g_root_path.'/adm_plugins/history_plugin/history_save.php?hist_id='.$getHistId.'&amp;headline='. $headline. '&amp', $page);

@@ -4,6 +4,10 @@
         <isocode>da</isocode>
         <name>Dansk</name>
     </language>
+        <language>
+        <isocode>de-CH</isocode>
+        <name>Deutsch (Schweiz)</name>
+    </language>
     <language>
         <isocode>de</isocode>
         <name>Deutsch (du)</name>

@@ -130,13 +130,14 @@ if($url === '')
 
 header('Content-type: text/html; charset=utf-8');
 
+// @ptabaden: Removed error icon and changed to h3
 echo '
 <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-    <h4 class="modal-title">'.$gL10n->get('SYS_NOTE').'</h4>
+    <h3 class="modal-title">'.$gL10n->get('SYS_NOTE').'</h3>
 </div>
 <div class="modal-body row">
-    <div class="col-xs-2"><img style="width: 32px; height: 32px;" src="'.THEME_PATH.'/icons/'.$icon.'" alt="Icon" /></div>
+    
     <div id="message_text" class="col-xs-10">'.$gL10n->get($text, $textVariable, $textVariable2).'</div>
 </div>
 <div class="modal-footer">

@@ -118,8 +118,9 @@ function subfolder($parentId, $vorschub, $photoAlbum, $phoId)
 $page = new HtmlPage($headline);
 
 // add back link to module menu
+// @ptabaden: Changed Icon
 $photoAlbumMenu = $page->getMenu();
-$photoAlbumMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+$photoAlbumMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), '<i class="fa fa-arrow-left" alt="'.$gL10n->get('SYS_BACK').'" title="'.$gL10n->get('SYS_BACK').'"></i>', '');
 
 if($getMode === 'new')
 {
