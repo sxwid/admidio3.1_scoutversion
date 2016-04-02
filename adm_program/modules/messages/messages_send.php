@@ -203,17 +203,20 @@ if ($getMsgType === 'EMAIL')
                 }
                 
                 // @ptabaden change leitermail
-                if($postMsg_l == false && $postMsg_p == true )
-                {
-                    $sqlConditions .= ' AND leader.usd_value = 0 '; 
-                }
-                elseif($postMsg_l == true && $postMsg_p == false )
-                {
-                    $sqlConditions .= ' AND leader.usd_value = 1 ';
-                }
-                elseif($postMsg_l == false && $postMsg_p == false )
-                {
-                    $gMessage->show($gL10n->get('MAI_ROLE_NO_EMAILS'));
+                if(isLeiter($gCurrentUser->getValue('usr_id'))==true)
+                    {
+                    if($postMsg_l == false && $postMsg_p == true )
+                    {
+                        $sqlConditions .= ' AND leader.usd_value = 0 '; 
+                    }
+                    elseif($postMsg_l == true && $postMsg_p == false )
+                    {
+                        $sqlConditions .= ' AND leader.usd_value = 1 ';
+                    }
+                    elseif($postMsg_l == false && $postMsg_p == false )
+                    {
+                        $gMessage->show($gL10n->get('MAI_ROLE_NO_EMAILS'));
+                    }
                 }
 
                 $sql = 'SELECT first_name.usd_value as first_name, last_name.usd_value as last_name,
