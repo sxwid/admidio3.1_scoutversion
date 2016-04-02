@@ -83,6 +83,7 @@ $sql = 'SELECT usr_id, last_name.usd_value as last_name, first_name.usd_value as
                    AND mem_begin  <= \''.DATE_NOW.'\'
                    AND mem_end     > \''.DATE_NOW.'\'
                    AND mem_usr_id  = usr_id) as member_this_orga,
+                      pfadiname.usd_value as pfadiname,
                (SELECT COUNT(*)
                   FROM '.TBL_MEMBERS.'
             INNER JOIN '.TBL_ROLES.'
@@ -94,7 +95,8 @@ $sql = 'SELECT usr_id, last_name.usd_value as last_name, first_name.usd_value as
                    AND cat_org_id <> '. $gCurrentOrganization->getValue('org_id'). '
                    AND mem_begin  <= \''.DATE_NOW.'\'
                    AND mem_end     > \''.DATE_NOW.'\'
-                   AND mem_usr_id  = usr_id) as member_other_orga
+                   AND mem_usr_id  = usr_id) as member_other_orga,
+                      pfadiname.usd_value as pfadiname
           FROM '.TBL_USERS.'
     INNER JOIN '.TBL_USER_DATA.' as last_name
             ON last_name.usd_usr_id = usr_id
@@ -111,6 +113,9 @@ $sql = 'SELECT usr_id, last_name.usd_value as last_name, first_name.usd_value as
      LEFT JOIN '.TBL_USER_DATA.' as birthday
             ON birthday.usd_usr_id = usr_id
            AND birthday.usd_usf_id = '. $gProfileFields->getProperty('BIRTHDAY', 'usf_id'). '
+     LEFT JOIN '. TBL_USER_DATA. ' as pfadiname
+            ON pfadiname.usd_usr_id = usr_id
+           AND pfadiname.usd_usf_id = '. $gProfileFields->getProperty('PFADINAME', 'usf_id'). '
          WHERE usr_valid = 1
                '.$memberCondition.'
       ORDER BY last_name.usd_value, first_name.usd_value ';
@@ -145,13 +150,15 @@ $page->addJavascript('
 // get module menu
 $membersAdministrationMenu = $page->getMenu();
 
-$membersAdministrationMenu->addItem('menu_item_create_user', $g_root_path.'/adm_program/modules/members/members_new.php', $gL10n->get('MEM_CREATE_USER'), 'add.png');
+// @ptabaden: Changed icon
+$membersAdministrationMenu->addItem('menu_item_create_user', $g_root_path.'/adm_program/modules/members/members_new.php', '<i class="fa fa-plus" alt="'.$gL10n->get('MEM_CREATE_USER').'" title="'.$gL10n->get('MEM_CREATE_USER').'"></i><div class="iconDescription">'.$gL10n->get('MEM_CREATE_USER').'</div>', '');
 
 if($gPreferences['profile_log_edit_fields'] == 1)
 {
     // show link to view profile field change history
+    // @ptabaden: Changed icon
     $membersAdministrationMenu->addItem('menu_item_change_history', $g_root_path.'/adm_program/modules/members/profile_field_history.php',
-                                $gL10n->get('MEM_CHANGE_HISTORY'), 'clock.png');
+                                '<i class="fa fa-history" alt="'.$gL10n->get('MEM_CHANGE_HISTORY').'" title="'.$gL10n->get('MEM_CHANGE_HISTORY').'"></i><div class="iconDescription">'.$gL10n->get('MEM_CHANGE_HISTORY').'</div>', '');
 }
 
 // show checkbox to select all users or only active members
@@ -183,24 +190,28 @@ if($gCurrentUser->isWebmaster())
 $membersTable = new HtmlTable('tbl_members', $page, true, true, 'table table-condensed');
 
 // create array with all column heading values
+// @ptabaden: Removed text "Funktionen" and Status an Mem updated on and image, added sys_vulgo
 $columnHeading = array(
-    $gL10n->get('SYS_ABR_NO'),
-    '<img class="admidio-icon-info" src="'. THEME_PATH. '/icons/profile.png"
-        alt="'.$gL10n->get('SYS_MEMBER_OF_ORGANIZATION', $gCurrentOrganization->getValue('org_longname')).'"
-        title="'.$gL10n->get('SYS_MEMBER_OF_ORGANIZATION', $gCurrentOrganization->getValue('org_longname')).'" />',
+    '',
     $gL10n->get('SYS_NAME'),
-    $gL10n->get('SYS_USER'),
-    '<img class="admidio-icon-info" alt="'.$gL10n->get('SYS_GENDER').'" title="" src="'.THEME_PATH.'/icons/gender.png" data-original-title="'.$gL10n->get('SYS_GENDER').'">',
+    $gL10n->get('SYS_VULGO'),
+    '',
     $gL10n->get('SYS_BIRTHDAY'),
-    $gL10n->get('MEM_UPDATED_ON'),
-    '&nbsp;'
+    ''
 );
 
+// @ptabaden: removed two collumn (new 8) and hidd collumn 6 and mem update info
 $membersTable->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'left', 'left', 'left', 'right'));
 $membersTable->disableDatatablesColumnsSort(8);
 $membersTable->addRowHeadingByArray($columnHeading);
 $membersTable->setDatatablesRowsPerPage($gPreferences['members_users_per_page']);
 $membersTable->setMessageIfNoRowsFound('SYS_NO_ENTRIES');
+// set alternative order column for member status icons
+$membersTable->setDatatablesAlternativOrderColumns(2, 3);
+// $membersTable->setDatatablesColumnsHide(2);
+// set alternative order column for gender icons
+$membersTable->setDatatablesAlternativOrderColumns(5, 6);
+// $membersTable->setDatatablesColumnsHide(6);
 
 $irow = 1;  // Zahler fuer die jeweilige Zeile
 
@@ -230,21 +241,20 @@ while($row = $mglStatement->fetch())
     }
 
     // create array with all column values
+    // @ptabaden: Deleted link to member of the organisation, and emptied one collumn
     $columnValues = array(
         $irow,
-        array('value' => '<a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='. $row['usr_id']. '"><img
-             src="'. THEME_PATH. '/icons/'.$icon.'" alt="'.$iconText.'" title="'.$iconText.'" />',
-              'order' => $memberOfThisOrganization),
-        '<a href="'.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='. $row['usr_id']. '">'. $row['last_name']. ',&nbsp;'. $row['first_name']. '</a>',
-    );
+        '<a href="'.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='. $row['usr_id']. '">'. $row['last_name']. ',&nbsp;'. $row['first_name'].'</a>'
+        );
 
-    if(strlen($row['usr_login_name']) > 0)
+    // @ptabaden: Changed to scout name
+    if(strlen($row['pfadiname']) > 0)
     {
-        $columnValues[] = $row['usr_login_name'];
+        $columnValues[] = $row['pfadiname'];
     }
     else
     {
-        $columnValues[] = '';
+        $columnValues[] = '&ndash;';
     }
 
     if(strlen($row['gender']) > 0)
@@ -268,8 +278,9 @@ while($row = $mglStatement->fetch())
     {
         $columnValues[] = '';
     }
-
-    $columnValues[] = $timestampChange->format($gPreferences['system_date'].' '.$gPreferences['system_time']);
+    
+// @ptabaden: Removed edit date (not important for this view)
+//    $columnValues[] = $timestampChange->format($gPreferences['system_date'].' '.$gPreferences['system_time']);
 
     $userAdministration = '';
 
@@ -282,16 +293,16 @@ while($row = $mglStatement->fetch())
         if(strlen($row['email']) > 0 && $gPreferences['enable_system_mails'] == 1)
         {
             // if email is set and systemmails are activated then webmaster can send a new password to user
+            // @ptabaden: Changed icon
             $userAdministration = '
-            <a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/members/members_function.php?usr_id='. $row['usr_id']. '&amp;mode=5"><img
-                src="'. THEME_PATH. '/icons/key.png" alt="'.$gL10n->get('MEM_SEND_USERNAME_PASSWORD').'" title="'.$gL10n->get('MEM_SEND_USERNAME_PASSWORD').'" /></a>';
+            <a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/members/members_function.php?usr_id='. $row['usr_id']. '&amp;mode=5"><i class="fa fa-unlock-alt" alt="'.$gL10n->get('MEM_SEND_USERNAME_PASSWORD').'" title="'.$gL10n->get('MEM_SEND_USERNAME_PASSWORD').'"></i></a>';
         }
         else
         {
             // if user has no email or send email is disabled then webmaster could set a new password
+            // @ptabaden: Changed icon
             $userAdministration = '
-            <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal" href="'.$g_root_path. '/adm_program/modules/profile/password.php?usr_id='. $row['usr_id']. '"><img
-                src="'. THEME_PATH. '/icons/key.png" alt="'.$gL10n->get('SYS_CHANGE_PASSWORD').'" title="'.$gL10n->get('SYS_CHANGE_PASSWORD').'" /></a>';
+            <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal" href="'.$g_root_path. '/adm_program/modules/profile/password.php?usr_id='. $row['usr_id']. '"><i class="fa fa-unlock-alt" alt="'.$gL10n->get('SYS_CHANGE_PASSWORD').'" title="'.$gL10n->get('SYS_CHANGE_PASSWORD').'"></i></a>';
         }
     }
 
@@ -305,17 +316,16 @@ while($row = $mglStatement->fetch())
         {
             $mail_link = $g_root_path.'/adm_program/modules/messages/messages_write.php?usr_id='. $row['usr_id'];
         }
-
-        $userAdministration .= '<a class="admidio-icon-link" href="'.$mail_link.'"><img src="'. THEME_PATH. '/icons/email.png"
-                                alt="'.$gL10n->get('SYS_SEND_EMAIL_TO', $row['email']).'" title="'.$gL10n->get('SYS_SEND_EMAIL_TO', $row['email']).'" /></a>';
+	// @ptabaden: Changed icon
+        $userAdministration .= '<a class="admidio-icon-link" href="'.$mail_link.'"><i class="fa fa-envelope" alt="'.$gL10n->get('SYS_SEND_EMAIL_TO', $row['email']).'" title="'.$gL10n->get('SYS_SEND_EMAIL_TO', $row['email']).'"></i></a>';
     }
 
     // Link um User zu editieren
     // es duerfen keine Nicht-Mitglieder editiert werden, die Mitglied in einer anderen Orga sind
     if($row['member_this_orga'] > 0 || $row['member_other_orga'] == 0)
     {
-        $userAdministration .= '<a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/profile/profile_new.php?user_id='. $row['usr_id']. '"><img
-                                    src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('MEM_EDIT_USER').'" title="'.$gL10n->get('MEM_EDIT_USER').'" /></a>';
+	// @ptabaden: Changed Icon
+        $userAdministration .= '<a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/profile/profile_new.php?user_id='. $row['usr_id']. '"><i class="fa fa-pencil" alt="'.$gL10n->get('MEM_EDIT_USER').'" title="'.$gL10n->get('MEM_EDIT_USER').'"></i></a>';
     }
 
     // Mitglieder entfernen
@@ -323,8 +333,8 @@ while($row = $mglStatement->fetch())
         || $row['member_this_orga'] > 0)                              // aktive Mitglieder duerfen von berechtigten Usern entfernt werden
         && $row['usr_id'] != $gCurrentUser->getValue('usr_id'))       // das eigene Profil darf keiner entfernen
     {
-        $userAdministration .= '<a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/members/members_function.php?usr_id='.$row['usr_id'].'&amp;mode=6"><img
-                                    src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('MEM_REMOVE_USER').'" title="'.$gL10n->get('MEM_REMOVE_USER').'" /></a>';
+        // @ptabaden: Changed icon
+        $userAdministration .= '<a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/members/members_function.php?usr_id='.$row['usr_id'].'&amp;mode=6"><i class="fa fa-times" alt="'.$gL10n->get('MEM_REMOVE_USER').'" title="'.$gL10n->get('MEM_REMOVE_USER').'"></i></a>';
     }
 
     $columnValues[] = $userAdministration;

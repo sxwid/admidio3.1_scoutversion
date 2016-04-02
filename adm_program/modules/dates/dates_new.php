@@ -52,7 +52,8 @@ elseif($getDateId > 0)
 }
 else
 {
-    $headline = $gL10n->get('SYS_CREATE_VAR', $getHeadline);
+    // @ptabaden: added Value, without translation!
+    $headline = $gL10n->get('SYS_NEW_VAR', $getHeadline);
     $mode = 1;
 }
 
@@ -207,12 +208,14 @@ $page->addJavascript('
     });', true);
 
 // add back link to module menu
+// @ptabaden: deleted icon
 $datesMenu = $page->getMenu();
-$datesMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+$datesMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), '<i class="fa fa-arrow-left" alt="'.$gL10n->get('SYS_BACK').'" title="'.$gL10n->get('SYS_BACK').'"></i><div class="iconDescription">'.$gL10n->get('SYS_BACK').'</div>', '');
 
 // show form
-$form = new HtmlForm('dates_edit_form', $g_root_path.'/adm_program/modules/dates/dates_function.php?dat_id='.$getDateId.'&amp;mode='.$mode.'&amp;copy='.$getCopy, $page);
-$form->openGroupBox('gb_title_location', $gL10n->get('SYS_TITLE').' & '.$gL10n->get('DAT_LOCATION'));
+// @ptabaden: added h3 and changed "&" to "und"
+$form = new HtmlForm('dates_edit_form', $g_root_path.'/adm_program/modules/dates/dates_function.php?dat_id='.$getDateId.'&amp;mode='.$mode, $page);
+$form->openGroupBox('gb_title_location', '<h3>'.$gL10n->get('SYS_TITLE').' und '.$gL10n->get('DAT_LOCATION').'</h3>');
     $form->addInput('dat_headline', $gL10n->get('SYS_TITLE'), $date->getValue('dat_headline'), array('maxLength' => 100, 'property' => FIELD_REQUIRED));
 
     // if a map link should be shown in the event then show help text and a field where the user could choose the country
@@ -249,14 +252,16 @@ $form->openGroupBox('gb_title_location', $gL10n->get('SYS_TITLE').' & '.$gL10n->
         $form->addSelectBoxFromSql('dat_room_id', $gL10n->get('SYS_ROOM'), $gDb, $sql, array('defaultValue' => $date->getValue('dat_room_id')));
     }
 $form->closeGroupBox();
-$form->openGroupBox('gb_period_calendar', $gL10n->get('SYS_PERIOD').' & '.$gL10n->get('DAT_CALENDAR'));
+// @ptabaden: changed "&" to "und" and added h3
+$form->openGroupBox('gb_period_calendar', '<h3>'.$gL10n->get('SYS_PERIOD').' und '.$gL10n->get('DAT_CALENDAR').'</h3>');
     $form->addCheckbox('dat_all_day', $gL10n->get('DAT_ALL_DAY'), $date->getValue('dat_all_day'));
     $form->addInput('date_from', $gL10n->get('SYS_START'), $date->getValue('dat_begin', $gPreferences['system_date'].' '.$gPreferences['system_time']), array('type' => 'datetime', 'property' => FIELD_REQUIRED));
     $form->addInput('date_to', $gL10n->get('SYS_END'), $date->getValue('dat_end', $gPreferences['system_date'].' '.$gPreferences['system_time']), array('type' => 'datetime', 'property' => FIELD_REQUIRED));
     $form->addSelectBoxForCategories('dat_cat_id', $gL10n->get('DAT_CALENDAR'), $gDb, 'DAT', 'EDIT_CATEGORIES',
                                      array('property' => FIELD_REQUIRED, 'defaultValue' => $date->getValue('dat_cat_id')));
 $form->closeGroupBox();
-$form->openGroupBox('gb_visibility_registration', $gL10n->get('DAT_VISIBILITY').' & '.$gL10n->get('SYS_REGISTRATION'));
+// @ptabaden: changed "&" to "und" and added h3
+$form->openGroupBox('gb_visibility_registration', '<h3>'.$gL10n->get('DAT_VISIBILITY').' und '.$gL10n->get('SYS_REGISTRATION').'</h3>');
     // add a multiselectbox to the form where the user can choose all roles that should see this event
     // first read all relevant roles from database and create an array with them
     $sql = 'SELECT *
@@ -279,7 +284,8 @@ $form->openGroupBox('gb_visibility_registration', $gL10n->get('DAT_VISIBILITY').
                                                                                    'defaultValue' => $dateRoles,
                                                                                    'multiselect'  => true));
 
-    $form->addCheckbox('dat_highlight', $gL10n->get('DAT_HIGHLIGHT_DATE'), $date->getValue('dat_highlight'));
+    // @ptabaden: I don't like highlighting of dates #ugly
+//    $form->addCheckbox('dat_highlight', $gL10n->get('DAT_HIGHLIGHT_DATE'), $date->getValue('dat_highlight'));
 
     // if current organization has a parent organization or is child organizations then show option to set this announcement to global
     if($gCurrentOrganization->getValue('org_org_id_parent') > 0 || $gCurrentOrganization->hasChildOrganizations())
@@ -290,12 +296,15 @@ $form->openGroupBox('gb_visibility_registration', $gL10n->get('DAT_VISIBILITY').
 
         $form->addCheckbox('dat_global', $gL10n->get('SYS_ENTRY_MULTI_ORGA'), $date->getValue('dat_global'), array('helpTextIdLabel' => array('SYS_DATA_GLOBAL', $organizations)));
     }
-    $form->addCheckbox('date_registration_possible', $gL10n->get('DAT_REGISTRATION_POSSIBLE'), $dateRegistrationPossible, array('helpTextIdLabel' => 'DAT_LOGIN_POSSIBLE'));
+    // @ptabaden: date registration possible true as standart
+    $form->addCheckbox('date_registration_possible', $gL10n->get('DAT_REGISTRATION_POSSIBLE'), $dateRegistrationPossible = true, array('helpTextIdLabel' => 'DAT_LOGIN_POSSIBLE'));
     $form->addCheckbox('date_current_user_assigned', $gL10n->get('DAT_PARTICIPATE_AT_DATE'), $dateCurrentUserAssigned, array('helpTextIdLabel' => 'DAT_PARTICIPATE_AT_DATE_DESC'));
-    $form->addInput('dat_max_members', $gL10n->get('DAT_PARTICIPANTS_LIMIT'), $date->getValue('dat_max_members'),
-                    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999, 'helpTextIdLabel' => 'DAT_MAX_MEMBERS'));
+    // @ptabaden: deactivated: Seldom of use for pta
+//    $form->addInput('dat_max_members', $gL10n->get('DAT_PARTICIPANTS_LIMIT'), $date->getValue('dat_max_members'),
+//                    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999, 'helpTextIdLabel' => 'DAT_MAX_MEMBERS'));
 $form->closeGroupBox();
-$form->openGroupBox('gb_description', $gL10n->get('SYS_DESCRIPTION'), 'admidio-panel-editor');
+// @ptabaden: added h3
+$form->openGroupBox('gb_description', '<h3>'.$gL10n->get('SYS_DESCRIPTION').'</h3>', 'admidio-panel-editor');
     $form->addEditor('dat_description', null, $date->getValue('dat_description'));
 $form->closeGroupBox();
 

@@ -80,14 +80,15 @@ if(isset($page) && is_object($page))
     $page->addCssFile($g_root_path.'/adm_plugins/login_form/login_form.css');
 }
 
+// @ptabaden: Changed from h3 to h5
 echo '<div id="plugin_'. $plugin_folder. '" class="admidio-plugin-content">';
     if($gValidLogin)
     {
-        echo '<h3>'.$gL10n->get('SYS_REGISTERED_AS').'</h3>';
+        echo '<h5>'.$gL10n->get('SYS_REGISTERED_AS').'</h5>';
     }
     else
     {
-        echo '<h3>'.$gL10n->get('SYS_LOGIN').'</h3>';
+        echo '<h5>'.$gL10n->get('SYS_LOGIN').'</h5>';
     }
 
 if($gValidLogin)
@@ -206,8 +207,8 @@ else
 
     $form->addSubmitButton('next_page', $gL10n->get('SYS_LOGIN'), array('icon' => $iconCode));
     $form->show();
-
-    echo '<div class="btn-group-vertical" role="group">';
+	// @ptabaden: Added id to div
+    echo '<div id="login_problem_links" class="btn-group-vertical" role="group">';
 
     // show links for registration and help
     if($plg_show_register_link && $gPreferences['registration_mode'])

@@ -182,25 +182,20 @@ class Message
                 else
                 {
                     // Wenn weitergeleitet wird, dann auch immer einen Weiter-Button anzeigen
+                    // @ptabaden: Changed icons
                     $htmlButtons .= '
-                        <a class="btn" href="'. $this->forwardUrl. '">'.$gL10n->get('SYS_NEXT').'
-                            <img src="'. THEME_PATH. '/icons/forward.png" alt="'.$gL10n->get('SYS_NEXT').'"
-                                title="'.$gL10n->get('SYS_NEXT').'" />
-                        </a>';
+                        <a class="navbar-link" href="'. $this->forwardUrl. '"><i class="fa fa-arrow-right" alt="'.$gL10n->get('SYS_NEXT').'" title="'.$gL10n->get('SYS_NEXT').'"></i><div class="iconDescription">'.$gL10n->get('SYS_NEXT').'</div></a>';
                 }
             }
             else
             {
                 // Wenn nicht weitergeleitet wird, dann immer einen Zurueck-Button anzeigen
                 // bzw. ggf. einen Fenster-Schließen-Button
+		// @ptabaden: Changed icons
                 if(!$this->modalWindowMode)
                 {
                     $htmlButtons .= '
-                        <a class="btn" href="javascript:history.back()">
-                            <img src="'.THEME_PATH.'/icons/back.png" alt="'.$gL10n->get('SYS_BACK').'"
-                                title="'.$gL10n->get('SYS_BACK').'" />'.
-                            $gL10n->get('SYS_BACK').
-                        '</a>';
+                        <a class="navbar-link" href="javascript:history.back()"><i class="fa fa-arrow-left" alt="'.$gL10n->get('SYS_BACK').'" title="'.$gL10n->get('SYS_BACK').'"></i><div class="iconDescription">'.$gL10n->get('SYS_BACK').'</div></a>';
                 }
             }
         }

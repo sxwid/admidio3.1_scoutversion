@@ -202,10 +202,11 @@ if ($numMembers == 0)
 }
 
 // define title (html) and headline
-$title = $gL10n->get('LST_LIST').' - '.$roleName;
+// @ptabaden: Korrekter Strich
+$title = $gL10n->get('LST_LIST').' Ð '.$roleName;
 if (strlen($list->getValue('lst_name')) > 0)
 {
-    $headline = $roleName.' - '.$list->getValue('lst_name');
+    $headline = $roleName.' &ndash; '.$list->getValue('lst_name');
 }
 else
 {
@@ -225,15 +226,15 @@ if ($getMode !== 'csv')
 
     if ($getShowMembers === 0)
     {
-        $htmlSubHeadline .= ' - '.$gL10n->get('LST_ACTIVE_MEMBERS');
+        $htmlSubHeadline .= ' &ndash; '.$gL10n->get('LST_ACTIVE_MEMBERS');
     }
     elseif ($getShowMembers === 1)
     {
-        $htmlSubHeadline .= ' - '.$gL10n->get('LST_FORMER_MEMBERS');
+        $htmlSubHeadline .= ' &ndash; '.$gL10n->get('LST_FORMER_MEMBERS');
     }
     elseif ($getShowMembers === 2)
     {
-        $htmlSubHeadline .= ' - '.$gL10n->get('LST_ACTIVE_FORMER_MEMBERS');
+        $htmlSubHeadline .= ' &ndash; '.$gL10n->get('LST_ACTIVE_FORMER_MEMBERS');
     }
 
     if ($getMode === 'print')
@@ -300,21 +301,22 @@ if ($getMode !== 'csv')
         $page->setTitle($title);
         $page->setHeadline($headline);
 
+	// @ptabaden: Hide details
         // Only for active members of a role
-        if ($getShowMembers === 0)
-        {
+        // if ($getShowMembers === 0)
+        // {
             // create filter menu with elements for start-/enddate
-            $filterNavbar = new HtmlNavbar('menu_list_filter', null, null, 'filter');
-            $form = new HtmlForm('navbar_filter_form', $g_root_path.'/adm_program/modules/lists/lists_show.php', $page, array('type' => 'navbar', 'setFocus' => false));
-            $form->addInput('date_from', $gL10n->get('LST_ROLE_MEMBERSHIP_IN_PERIOD'), $dateFrom, array('type' => 'date', 'maxLength' => 10));
-            $form->addInput('date_to', $gL10n->get('LST_ROLE_MEMBERSHIP_TO'), $dateTo, array('type' => 'date', 'maxLength' => 10));
-            $form->addInput('lst_id', '', $getListId, array('property' => FIELD_HIDDEN));
-            $form->addInput('rol_ids', '', $getRoleIds, array('property' => FIELD_HIDDEN));
-            $form->addInput('show_members', '', $getShowMembers, array('property' => FIELD_HIDDEN));
-            $form->addSubmitButton('btn_send', $gL10n->get('SYS_OK'));
-            $filterNavbar->addForm($form->show(false));
-            $page->addHtml($filterNavbar->show(false));
-        }
+        //    $filterNavbar = new HtmlNavbar('menu_list_filter', null, null, 'filter');
+        //    $form = new HtmlForm('navbar_filter_form', $g_root_path.'/adm_program/modules/lists/lists_show.php', $page, array('type' => 'navbar', 'setFocus' => false));
+        //    $form->addInput('date_from', $gL10n->get('LST_ROLE_MEMBERSHIP_IN_PERIOD'), $dateFrom, array('type' => 'date', 'maxLength' => 10));
+        //    $form->addInput('date_to', $gL10n->get('LST_ROLE_MEMBERSHIP_TO'), $dateTo, array('type' => 'date', 'maxLength' => 10));
+        //    $form->addInput('lst_id', '', $getListId, array('property' => FIELD_HIDDEN));
+        //    $form->addInput('rol_ids', '', $getRoleIds, array('property' => FIELD_HIDDEN));
+        //    $form->addInput('show_members', '', $getShowMembers, array('property' => FIELD_HIDDEN));
+        //    $form->addSubmitButton('btn_send', $gL10n->get('SYS_OK'));
+        //    $filterNavbar->addForm($form->show(false));
+        //    $page->addHtml($filterNavbar->show(false));
+        // }
 
         $page->addHtml('<h5>'.$htmlSubHeadline.'</h5>');
         $page->addJavascript('
@@ -333,8 +335,9 @@ if ($getMode !== 'csv')
 
         // get module menu
         $listsMenu = $page->getMenu();
-
-        $listsMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+		
+		// @ptabaden: Changed icon
+        $listsMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), '<i class="fa fa-arrow-left" alt="'.$gL10n->get('SYS_BACK').'" title="'.$gL10n->get('SYS_BACK').'"></i><div class="iconDescription">'.$gL10n->get('SYS_BACK').'</div>', '');
 
         if ($getFullScreen)
         {
@@ -352,14 +355,16 @@ if ($getMode !== 'csv')
             // link to assign or remove members if you are allowed to do it
             if ($role->allowedToAssignMembers($gCurrentUser))
             {
-                $listsMenu->addItem('menu_item_assign_members', $g_root_path.'/adm_program/modules/lists/members_assignment.php?rol_id='.$role->getValue('rol_id'),
-                    $gL10n->get('SYS_ASSIGN_MEMBERS'), 'add.png');
+		// @ptabaden: Changed icon
+                $listsMenu->addItem('menu_item_assign_members', $g_root_path.'/adm_program/modules/lists/members_assignment.php?rol_id='. $role->getValue('rol_id'),
+                '<i class="fa fa-plus" alt="'.$gL10n->get('SYS_ASSIGN_MEMBERS').'" title="'.$gL10n->get('SYS_ASSIGN_MEMBERS').'"></i><div class="iconDescription">'.$gL10n->get('SYS_ASSIGN_MEMBERS').'</div>', '');
             }
         }
 
         // link to print overlay and exports
-        $listsMenu->addItem('menu_item_print_view', '#', $gL10n->get('LST_PRINT_PREVIEW'), 'print.png');
-
+        // @ptabaden: Changed icon
+        $listsMenu->addItem('menu_item_print_view', '#', '<i class="fa fa-print" alt="'.$gL10n->get('LST_PRINT_PREVIEW').'" title="'.$gL10n->get('LST_PRINT_PREVIEW').'"></i><div class="iconDescription">'.$gL10n->get('LST_PRINT_PREVIEW').'</div>', '');
+        
         $form = new HtmlForm('navbar_export_to_form', '', $page, array('type' => 'navbar', 'setFocus' => false));
         $selectBoxEntries = array(
             ''       => $gL10n->get('LST_EXPORT_TO').' ...',

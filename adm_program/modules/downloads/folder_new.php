@@ -69,8 +69,9 @@ $parentFolderName = $folder->getValue('fol_name');
 $page = new HtmlPage($headline);
 
 // add back link to module menu
+// @ptabaden: Changed icon of back button
 $folderNewMenu = $page->getMenu();
-$folderNewMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+$folderNewMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), '<i class="fa fa-arrow-left" alt="'.$gL10n->get('SYS_BACK').'" title="'.$gL10n->get('SYS_BACK').'"></i><div class="iconDescription">'.$gL10n->get('SYS_BACK').'</div>', '');
 
 $page->addHtml('<p class="lead">'.$gL10n->get('DOW_CREATE_FOLDER_DESC', $parentFolderName).'</p>');
 

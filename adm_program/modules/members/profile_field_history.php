@@ -147,8 +147,9 @@ if($fieldHistoryStatement->rowCount() === 0)
 $page = new HtmlPage($headline);
 
 // add back link to module menu
+// @ptabaden: Changed Back Icon
 $profileFieldHistoryMenu = $page->getMenu();
-$profileFieldHistoryMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+$profileFieldHistoryMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), '<i class="fa fa-arrow-left" alt="'.$gL10n->get('SYS_BACK').'" title="'.$gL10n->get('SYS_BACK').'"></i><div class="iconDescription">'.$gL10n->get('SYS_BACK').'</div>', '');
 
 // create filter menu with input elements for Startdate and Enddate
 $FilterNavbar = new HtmlNavbar('menu_profile_field_history_filter', null, null, 'filter');

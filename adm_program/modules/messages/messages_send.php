@@ -29,7 +29,7 @@ $postBody       = admFuncVariableIsValid($_POST, 'msg_body', 'html');
 $postBodySQL    = admFuncVariableIsValid($_POST, 'msg_body', 'string');
 $postDeliveryConfirmation = admFuncVariableIsValid($_POST, 'delivery_confirmation', 'bool');
 $postCaptcha    = admFuncVariableIsValid($_POST, 'captcha', 'string');
-//@ptabaden change
+// @ptabaden change
 $postMsg_l      = admFuncVariableIsValid($_POST, 'msg_l', 'boolean');
 $postMsg_p      = admFuncVariableIsValid($_POST, 'msg_p', 'boolean');
 

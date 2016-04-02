@@ -202,6 +202,7 @@ class HtmlNavbar
         }
 
         // add html for navbar
+        // @ptabaden: added different icon for navbar
         $html = '
             <nav class="navbar navbar-default '.$cssClassNavbar.$this->customCssClass.'" role="navigation">
                 <div class="container-fluid">
@@ -209,9 +210,7 @@ class HtmlNavbar
                     <div class="navbar-header">
                       <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#'.$this->id.'">
                         <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
+                        <i class="fa fa-bars"></i>
                       </button>
                       <a class="navbar-brand '.$cssClassBrand.'" href="#">'.$this->name.'</a>
                     </div>
@@ -285,18 +284,15 @@ class HtmlNavbar
                     else
                     {
                         // add a dropdown to the navbar
-                        $html .= '
-                            <li class="dropdown '.$menuEntry['class'].'">
-                                <a id="'.$menuEntry['id'].'" href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                    <span class="glyphicon glyphicon-menu-hamburger"></span>'.$menuEntry['text'].'<span class="caret"></span>
-                                </a>
-                                <ul class="dropdown-menu" role="menu">';
+                        // @ptabaden: Removed submenu for mobile devices
+                        $html .= '<li class="dropdown '.$menuEntry['class'].'">
+                            <a id="'.$menuEntry['id'].'" href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-menu-hamburger"></span>'.$menuEntry['text'].'</a>';
 
                         foreach($menuEntry['items'] as $keyDropDown => $menuEntryDropDown)
                         {
                             $html .= $this->createHtmlLink($menuEntryDropDown);
                         }
-                        $html .= '</ul></li>';
+                        $html .= '</li>';
                     }
                 }
                 else

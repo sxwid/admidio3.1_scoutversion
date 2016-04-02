@@ -1919,12 +1919,12 @@ class HtmlForm extends HtmlFormBasic
                 $text = $gL10n->get($textId);
             }
         }
-
+		// @ptabaden: changed help icon
         if($parameters !== null)
         {
-            return '<img class="admidio-icon-help" src="'. THEME_PATH. '/icons/help.png" data-toggle="popover" data-html="true" data-trigger="hover"
-                data-placement="auto" title="'.$gL10n->get('SYS_NOTE').'" data-content="'.htmlspecialchars($text).'" alt="Help" />';
-        }
+            return '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
+                        href="'. $g_root_path. '/adm_program/system/msg_window.php?'.$parameters.'&amp;inline=true"> <i class="fa fa-question-circle" alt="Help"></i></a>';
+	}
         else
         {
             return '';

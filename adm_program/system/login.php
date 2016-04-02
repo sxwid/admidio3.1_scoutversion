@@ -34,8 +34,9 @@ $roleWebmaster = new TableRoles($gDb, $row['rol_id']);
 $page = new HtmlPage($headline);
 
 // add back link to module menu
+// @ptabaden: Changed icon
 $loginMenu = $page->getMenu();
-$loginMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+$loginMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), '<i class="fa fa-arrow-left" alt="'.$gL10n->get('SYS_BACK').'" title="'.$gL10n->get('SYS_BACK').'"></i><div class="iconDescription">'.$gL10n->get('SYS_BACK').'</div>', '');
 
 // show form
 $form = new HtmlForm('login_form', $g_root_path.'/adm_program/system/login_check.php', $page, array('showRequiredFields' => false));

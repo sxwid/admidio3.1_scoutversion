@@ -200,23 +200,26 @@ $page->addJavascript('
 $profileMenu = $page->getMenu();
 
 // show back link
+// @ptabaden: Changed Icon
 if($gNavigation->count() > 1)
 {
-    $profileMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+    $profileMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), '<i class="fa fa-arrow-left" alt="'.$gL10n->get('SYS_BACK').'" title="'.$gL10n->get('SYS_BACK').'"></i><div class="iconDescription">'.$gL10n->get('SYS_BACK').'</div>', '');
 }
 
 // if user has right then show link to edit profile
 if($gCurrentUser->hasRightEditProfile($user))
 {
+    // @ptabaden: Changed Icon
     $profileMenu->addItem('menu_item_new_entry', $g_root_path. '/adm_program/modules/profile/profile_new.php?user_id='.$user->getValue('usr_id'),
-                        $gL10n->get('PRO_EDIT_PROFILE'), 'edit.png');
+                        '<i class="fa fa-pencil" alt="'.$gL10n->get('PRO_EDIT_PROFILE').'" title="'.$gL10n->get('PRO_EDIT_PROFILE').'"></i><div class="iconDescription">'.$gL10n->get('PRO_EDIT_PROFILE').'</div>', '');
 }
 
 // Password of own user could be changed
 if($user->getValue('usr_id') == $gCurrentUser->getValue('usr_id'))
 {
+    // @ptabaden: Changed Icon
     $profileMenu->addItem('menu_item_password', $g_root_path. '/adm_program/modules/profile/password.php?usr_id='. $user->getValue('usr_id'),
-                        $gL10n->get('SYS_CHANGE_PASSWORD'), 'key.png');
+                        '<i class="fa fa-unlock-alt" alt="'.$gL10n->get('PRO_EDIT_PROFILE').'" title="'.$gL10n->get('PRO_EDIT_PROFILE').'"></i><div class="iconDescription">'.$gL10n->get('SYS_CHANGE_PASSWORD').'</div>', '');
 }
 elseif($gCurrentUser->isWebmaster() && isMember($user->getValue('usr_id'))
 && strlen($user->getValue('usr_login_name')) > 0)
@@ -226,29 +229,34 @@ elseif($gCurrentUser->isWebmaster() && isMember($user->getValue('usr_id'))
     if(strlen($user->getValue('EMAIL')) > 0 && $gPreferences['enable_system_mails'] == 1)
     {
         // if email is set and systemmails are activated then webmaster can send a new password to user
+        // @ptabaden: Changed icon
         $profileMenu->addItem('menu_item_send_password', $g_root_path.'/adm_program/modules/members/members_function.php?usr_id='.$user->getValue('usr_id').'&amp;mode=5',
-                            $gL10n->get('ORG_SEND_NEW_PASSWORD'), 'key.png');
+                            '<i class="fa fa-unlock-alt" alt="'.$gL10n->get('ORG_SEND_NEW_PASSWORD').'" title="'.$gL10n->get('ORG_SEND_NEW_PASSWORD').'"></i><div class="iconDescription">'.$gL10n->get('ORG_SEND_NEW_PASSWORD').'</div>', '');
     }
     else
     {
         // if user has no email or send email is disabled then webmaster could set a new password
+        // @ptabaden: Changed icon
         $profileMenu->addItem('menu_item_password', $g_root_path. '/adm_program/modules/profile/password.php?usr_id='. $user->getValue('usr_id'),
-                            $gL10n->get('SYS_CHANGE_PASSWORD'), 'key.png');
+                            '<i class="fa fa-unlock-alt" alt="'.$gL10n->get('SYS_CHANGE_PASSWORD').'" title="'.$gL10n->get('SYS_CHANGE_PASSWORD').'"></i><div class="iconDescription">'.$gL10n->get('SYS_CHANGE_PASSWORD').'</div>', '');
     }
 }
 
 // show link to view profile field change history
-if($gPreferences['profile_log_edit_fields'] == 1)
+// @ptabaden: History nur für Webmaster anzeigen
+if($gPreferences['profile_log_edit_fields'] == 1 && $gCurrentUser->isWebmaster())
 {
+    // @ptabaden: Changed Icon
     $profileMenu->addItem('menu_item_change_history', $g_root_path. '/adm_program/modules/members/profile_field_history.php?usr_id='. $user->getValue('usr_id'),
-                        $gL10n->get('MEM_CHANGE_HISTORY'), 'clock.png');
+                        '<i class="fa fa-history" alt="'.$gL10n->get('MEM_CHANGE_HISTORY').'" title="'.$gL10n->get('MEM_CHANGE_HISTORY').'"></i><div class="iconDescription">'.$gL10n->get('MEM_CHANGE_HISTORY').'</div>', '');
 }
 
 $profileMenu->addItem('menu_item_extras', null, $gL10n->get('SYS_MORE_FEATURES'), null, 'right');
 
 // show link to export the profile as vCard
+// @ptabaden: Changed Icon
 $profileMenu->addItem('menu_item_vcard', $g_root_path.'/adm_program/modules/profile/profile_function.php?mode=1&amp;user_id='. $user->getValue('usr_id'),
-                        $gL10n->get('PRO_EXPORT_VCARD'), 'vcard.png', 'right', 'menu_item_extras');
+                        '<i class="fa fa-download" alt="'.$gL10n->get('PRO_EXPORT_VCARD').'" title="'.$gL10n->get('PRO_EXPORT_VCARD').'"></i><div class="iconDescription">'.$gL10n->get('PRO_EXPORT_VCARD').'</div>', '', 'right', 'menu_item_extras');
 
 // if you have the right to assign roles then show the link to assign new roles to this user
 if($gCurrentUser->assignRoles())
@@ -263,34 +271,36 @@ if($gCurrentUser->isWebmaster())
     $profileMenu->addItem('menu_item_maintain_profile_fields', $g_root_path. '/adm_program/modules/preferences/fields.php',
                                 $gL10n->get('PRO_MAINTAIN_PROFILE_FIELDS'), 'application_form_edit.png', 'right', 'menu_item_extras');
 
-    // show link to system preferences of weblinks
+    // show link to system preferences of profile
+    // @ptabaden: Changed Icon
     $profileMenu->addItem('menu_item_preferences_links', $g_root_path.'/adm_program/modules/preferences/preferences.php?show_option=profile',
-                        $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right', 'menu_item_extras');
+                        '<i class="fa fa-cog" alt="'.$gL10n->get('SYS_MODULE_PREFERENCES').'" title="'.$gL10n->get('SYS_MODULE_PREFERENCES').'"></i><div class="iconDescription">'.$gL10n->get('SYS_MODULE_PREFERENCES').'</div>', '', 'right', 'menu_item_extras');
 }
 
 // *******************************************************************************
 // User data block
 // *******************************************************************************
-
+// @ptabaden: added h3
 $page->addHtml('
 <div class="panel panel-default" id="user_data_panel">
-    <div class="panel-heading">'.$gL10n->get('SYS_MASTER_DATA').'</div>
+    <div class="panel-heading"><h3>'.$gL10n->get('SYS_MASTER_DATA').'</h3></div>
     <div class="panel-body row">
         <div class="col-sm-8">');
             // create a static form
             $form = new HtmlForm('profile_master_data_form', null);
 
             // add lastname and firstname
-            if(strlen($user->getValue('GENDER')) > 0
-            && ($gCurrentUser->hasRightEditProfile($user) || $gProfileFields->getProperty('GENDER', 'usf_hidden') == 0))
-            {
+	    // @ptabaden: Hide Gender in Profile View Mode
+            // if(strlen($user->getValue('GENDER')) > 0
+            // && ($gCurrentUser->hasRightEditProfile($user) || $gProfileFields->getProperty('GENDER', 'usf_hidden') == 0))
+            // {
                 // Icon des Geschlechts anzeigen, wenn noetigen Rechte vorhanden
-                $form->addStaticControl('name', $gL10n->get('SYS_NAME'), $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME').' '.$user->getValue('GENDER', 'html'));
-            }
-            else
-            {
+            //    $form->addStaticControl('name', $gL10n->get('SYS_NAME'), $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME').' '.$user->getValue('GENDER', 'html'));
+            // }
+            // else
+            // {
                 $form->addStaticControl('name', $gL10n->get('SYS_NAME'), $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'));
-            }
+            // }
 
             // add loginname
             if(strlen($user->getValue('usr_login_name')) > 0)
@@ -318,6 +328,7 @@ $page->addHtml('
             foreach($gProfileFields->mProfileFields as $field)
             {
                 // nur Felder der Stammdaten anzeigen
+		// @ptabaden: google.ch
                 if($field->getValue('cat_name_intern') === 'MASTER_DATA'
                 && ($gCurrentUser->hasRightEditProfile($user) || $field->getValue('usf_hidden') == 0))
                 {
@@ -340,8 +351,8 @@ $page->addHtml('
                                 $bAddressOutput = true;
                                 $htmlAddress    = '';
                                 $address        = '';
-                                $map_url        = 'https://maps.google.com/?q=';
-                                $route_url      = 'https://maps.google.com/?f=d&amp;saddr='.
+                                $map_url        = 'https://maps.google.ch/?q=';
+                                $route_url      = 'https://maps.google.ch/?f=d&amp;saddr='.
                                     urlencode($gCurrentUser->getValue('ADDRESS')).
                                     ',%20'. urlencode($gCurrentUser->getValue('POSTCODE')).
                                     ',%20'. urlencode($gCurrentUser->getValue('CITY')).
@@ -392,17 +403,17 @@ $page->addHtml('
                                 $htmlAddress .= $address;
 
                                 // show route or address link if function is enabled and user has filled address or city
+                                // @ptabaden: Changed icon map and route
                                 if($gPreferences['profile_show_map_link'] && strlen($user->getValue('ADDRESS')) > 0
                                 && (strlen($user->getValue('POSTCODE')) > 0 || strlen($user->getValue('CITY')) > 0))
                                 {
                                     $htmlAddress .= '
-                                    <a class="btn" href="'. $map_url. '" target="_blank"><img src="'. THEME_PATH. '/icons/map.png"
-                                        alt="'.$gL10n->get('SYS_MAP').'" />'.$gL10n->get('SYS_MAP').'</a>';
+                                    <a class="admidio-icon-link" href="'. $map_url. '" target="_blank"><i class="fa fa-map" alt="'.$gL10n->get('SYS_MAP').'" title="'.$gL10n->get('SYS_MAP').'"></i></a>';
 
                                     // show route link if its not the profile of CurrentUser
                                     if($gCurrentUser->getValue('usr_id') != $user->getValue('usr_id'))
                                     {
-                                        $htmlAddress .= ' - <a href="'.$route_url.'" target="_blank">'.$gL10n->get('SYS_SHOW_ROUTE').'</a>';
+                                        $htmlAddress .= '<a class="admidio-icon-link" href="'.$route_url.'" target="_blank"><i class="fa fa-map-signs" alt="'.$gL10n->get('SYS_SHOW_ROUTE').'" title="'.$gL10n->get('SYS_SHOW_ROUTE').'"></i></a>';
                                     }
                                 }
 
@@ -431,19 +442,18 @@ $page->addHtml('
             $page->addHtml('<img id="profile_photo" class="thumbnail" src="profile_photo_show.php?usr_id='.$user->getValue('usr_id').'" alt="'.$gL10n->get('PRO_CURRENT_PICTURE').'" />');
 
             // Nur berechtigte User duerfen das Profilfoto editieren
+	    // @ptabaden: Changed Icon
             if($gCurrentUser->hasRightEditProfile($user))
             {
                 $page->addHtml('<div id="profile_picture_links" class="btn-group-vertical" role="group">
-                    <a class="btn" href="'.$g_root_path.'/adm_program/modules/profile/profile_photo_edit.php?usr_id='.$user->getValue('usr_id').'"><img
-                        src="'.THEME_PATH.'/icons/photo_upload.png" alt="'.$gL10n->get('PRO_CHANGE_PROFILE_PICTURE').'" /> '.$gL10n->get('PRO_CHANGE_PROFILE_PICTURE').'</a>');
+                    <a class="btn" href="'.$g_root_path.'/adm_program/modules/profile/profile_photo_edit.php?usr_id='.$user->getValue('usr_id').'"><i class="fa fa-pencil" alt="'.$gL10n->get('PRO_CHANGE_PROFILE_PICTURE').'" title="'.$gL10n->get('PRO_CHANGE_PROFILE_PICTURE').'"></i><div class="iconDescription">'.$gL10n->get('PRO_CHANGE_PROFILE_PICTURE').'</div></a>');
                 // Dass Bild kann natürlich nur gelöscht werden, wenn entsprechende Rechte bestehen
                 if((strlen($user->getValue('usr_photo')) > 0 && $gPreferences['profile_photo_storage'] == 0)
                     || file_exists(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$user->getValue('usr_id').'.jpg') && $gPreferences['profile_photo_storage'] == 1)
                 {
                     $page->addHtml('<a id="btn_delete_photo" class="btn" data-toggle="modal" data-target="#admidio_modal"
                                     href="'.$g_root_path.'/adm_program/system/popup_message.php?type=pro_pho&amp;element_id=no_element'.
-                                    '&amp;database_id='.$user->getValue('usr_id').'"><img src="'. THEME_PATH. '/icons/delete.png"
-                                    alt="'.$gL10n->get('PRO_DELETE_PROFILE_PICTURE').'" /> '.$gL10n->get('PRO_DELETE_PROFILE_PICTURE').'</a>');
+                                    '&amp;database_id='.$user->getValue('usr_id').'"><i class="fa fa-times" alt="'.$gL10n->get('PRO_DELETE_PROFILE_PICTURE').'" title="'.$gL10n->get('PRO_DELETE_PROFILE_PICTURE').'"></i><div class="iconDescription">'.$gL10n->get('PRO_DELETE_PROFILE_PICTURE').'</div></a>');
                 }
                 $page->addHtml('</div>');
             }
@@ -476,9 +486,10 @@ foreach($gProfileFields->mProfileFields as $field)
             }
             $category = $field->getValue('cat_name');
 
+            // @ptabaden: Added h3
             $page->addHtml('
             <div class="panel panel-default" id="'.$field->getValue('cat_name_intern').'_data_panel">
-                <div class="panel-heading">'.$field->getValue('cat_name').'</div>
+                <div class="panel-heading"><h3>'.$field->getValue('cat_name').'</h3></div>
                 <div class="panel-body">');
 
             // create a static form
@@ -553,9 +564,10 @@ if($gPreferences['profile_show_roles'] == 1)
         }
     }
 
+    // @ptabaden: Added h3
     $page->addHtml('
     <div class="panel panel-default" id="profile_authorizations_box">
-        <div class="panel-heading">'.$gL10n->get('SYS_AUTHORIZATION').'</div>
+        <div class="panel-heading"><h3>'.$gL10n->get('SYS_AUTHORIZATION').'</h3></div>
         <div class="panel-body" id="profile_authorizations_box_body">
             <p>');
 
@@ -641,10 +653,11 @@ if($gPreferences['profile_show_roles'] == 1)
     $count_role  = $roleStatement->rowCount();
 
     // Ausgabe
+    // @ptabaden: Added h3
     $page->addHtml('
     <div class="panel panel-default" id="profile_roles_box">
-        <div class="panel-heading">
-            '.$gL10n->get('ROL_ROLE_MEMBERSHIPS').'
+        <div class="panel-heading"><h3>
+            '.$gL10n->get('ROL_ROLE_MEMBERSHIPS').'</h3>
         </div>
         <div class="panel-body" id="profile_roles_box_body">
             '.getRoleMemberships('role_list', $user, $roleStatement, $count_role, false).'
@@ -668,10 +681,10 @@ if($gPreferences['profile_show_roles'] == 1)
     {
         $page->addHtml('<script type="text/javascript">profileJS.futureRoleCount="'.$count_role.'";</script>');
     }
-
+    // @ptabaden: Changed to h3
     $page->addHtml('
     <div class="panel panel-default" id="profile_future_roles_box" '.$visible.'>
-        <div class="panel-heading">'.$gL10n->get('PRO_FUTURE_ROLE_MEMBERSHIP').'</div>
+        <div class="panel-heading"><h3>'.$gL10n->get('PRO_FUTURE_ROLE_MEMBERSHIP').'</h3></div>
         <div class="panel-body" id="profile_future_roles_box_body">
             '.getRoleMemberships('future_role_list', $user, $roleStatement, $count_role, false).'
         </div>
@@ -699,10 +712,10 @@ if($gPreferences['profile_show_former_roles'] == 1)
     {
         $page->addHtml('<script type="text/javascript">profileJS.formerRoleCount="'.$count_role.'";</script>');
     }
-
+    // @ptabaden: Changed to h3
     $page->addHtml('
     <div class="panel panel-default" id="profile_former_roles_box" '.$visible.'>
-        <div class="panel-heading">'.$gL10n->get('PRO_FORMER_ROLE_MEMBERSHIP').'</div>
+        <div class="panel-heading"><h3>'.$gL10n->get('PRO_FORMER_ROLE_MEMBERSHIP').'<h3></div>
         <div class="panel-body" id="profile_former_roles_box_body">
             '.getRoleMemberships('former_role_list', $user, $roleStatement, $count_role, false).'
         </div>
