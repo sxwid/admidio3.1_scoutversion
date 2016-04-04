@@ -22,7 +22,7 @@ if(!$gCurrentUser->isWebmaster())
 
 // Initialize and check the parameters
 $getHistId    = admFuncVariableIsValid($_GET, 'hist_id', 'numeric');
-$headline = 'PortrŠt bearbeiten';
+$headline = 'Portr&auml;t bearbeiten';
 
 // add current url to navigation stack
 $gNavigation->addUrl(CURRENT_URL, $headline);
