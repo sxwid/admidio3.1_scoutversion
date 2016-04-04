@@ -106,7 +106,7 @@ if(isset($statement))
 {
     while ($row = $statement->fetch())
     {
-        $ReceiverName = '';
+        $receiverName = '';
         if (strpos($row['user'], '|') > 0)
         {
             $reciversplit = explode('|', $row['user']);
@@ -114,12 +114,12 @@ if(isset($statement))
             {
                 if (strpos($value, ':') > 0)
                 {
-                    $ReceiverName .= '; ' . $modulemessages->msgGroupNameSplit($value);
+                    $receiverName .= '; ' . $modulemessages->msgGroupNameSplit($value);
                 }
                 else
                 {
                     $user = new User($gDb, $gProfileFields, $value);
-                    $ReceiverName .= '; ' . $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
+                    $receiverName .= '; ' . $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
                 }
             }
         }
@@ -127,22 +127,22 @@ if(isset($statement))
         {
             if (strpos($row['user'], ':') > 0)
             {
-                $ReceiverName .= '; ' . $modulemessages->msgGroupNameSplit($row['user']);
+                $receiverName .= '; ' . $modulemessages->msgGroupNameSplit($row['user']);
             }
             else
             {
                 $user = new User($gDb, $gProfileFields, $row['user']);
-                $ReceiverName .= '; ' . $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
+                $receiverName .= '; ' . $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
             }
         }
-        $ReceiverName = substr($ReceiverName, 2);
+        $receiverName = substr($receiverName, 2);
 
         $message = new TableMessage($gDb, $row['msg_id']);
         ++$key;
 
         $messageAdministration = $part1 . $key . '&amp;name='.urlencode($message->getValue('msg_subject')).'&amp;database_id=' . $message->getValue('msg_id') . $part2;
 	// @ptabaden: changed order and icons, changed order, delted two cols
-        $table->addRowByArray(array('<h4 id="mail_timestamp">'.$message->getValue('msg_timestamp').'</h4><div id="mail" class="table_group"><h4 id="mail_receiver">'.$gL10n->get('MSG_OPPOSITE').': '.$ReceiverName.'</h4><h3 id="event_title"><a '. $href .$message->getValue('msg_id').'">'.$message->getValue('msg_subject').'</a></h3></div>', $messageAdministration),
+        $table->addRowByArray(array('<h4 id="mail_timestamp">'.$message->getValue('msg_timestamp').'</h4><div id="mail" class="table_group"><h4 id="mail_receiver">'.$gL10n->get('MSG_OPPOSITE').': '.$receiverName.'</h4><h3 id="event_title"><a '. $href .$message->getValue('msg_id').'">'.$message->getValue('msg_subject').'</a></h3></div>', $messageAdministration),
                 'row_message_'.$key);
     }
 }
@@ -161,7 +161,7 @@ if(isset($statement))
         {
             $user = new User($gDb, $gProfileFields, $row['msg_usr_id_sender']);
         }
-        $ReceiverName = $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
+        $receiverName = $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
         $message = new TableMessage($gDb, $row['msg_id']);
         ++$key;
 
@@ -170,7 +170,7 @@ if(isset($statement))
         $table->addRowByArray(array('<a class="admidio-icon-link" '. $href . $message->getValue('msg_id') . '">
                 <img class="admidio-icon-info" src="'. THEME_PATH. '/icons/pm.png" alt="'.$gL10n->get('PMS_MESSAGE').'" title="'.$gL10n->get('PMS_MESSAGE').'" />',
                 '<a '. $href .$message->getValue('msg_id').'">'.$message->getValue('msg_subject').'</a>',
-                $ReceiverName, $message->getValue('msg_timestamp'), $messageAdministration), 'row_message_'.$key, array('style' => 'font-weight: bold'));
+                $receiverName, $message->getValue('msg_timestamp'), $messageAdministration), 'row_message_'.$key, array('style' => 'font-weight: bold'));
     }
 }
 
@@ -189,7 +189,7 @@ if(isset($statement))
             $user = new User($gDb, $gProfileFields, $row['msg_usr_id_sender']);
         }
 
-        $ReceiverName = $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
+        $receiverName = $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
         $message = new TableMessage($gDb, $row['msg_id']);
         ++$key;
 
@@ -198,7 +198,7 @@ if(isset($statement))
         $table->addRowByArray(array('<a class="admidio-icon-link" '. $href . $message->getValue('msg_id') . '">
                 <img class="admidio-icon-info" src="'. THEME_PATH. '/icons/pm.png" alt="'.$gL10n->get('PMS_MESSAGE').'" title="'.$gL10n->get('PMS_MESSAGE').'" />',
                 '<a '. $href .$message->getValue('msg_id').'">'.$message->getValue('msg_subject').'</a>',
-                $ReceiverName, $message->getValue('msg_timestamp'), $messageAdministration), 'row_message_'.$key);
+                $receiverName, $message->getValue('msg_timestamp'), $messageAdministration), 'row_message_'.$key);
     }
 }
 

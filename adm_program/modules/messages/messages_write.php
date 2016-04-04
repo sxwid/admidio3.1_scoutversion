@@ -605,14 +605,15 @@ if (isset($messageStatement))
                     $receiverName .= '; ' . $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
                 }
             }
-            $receiverName = '<div class="panel-footer">'.$gL10n->get('MSG_OPPOSITE').': '.substr($receiverName, 2).'</div>';
+            // @ptabaden: removed div container
+            $receiverName = $gL10n->get('MSG_OPPOSITE').': '.substr($receiverName, 2);
         }
 		// @ptabaden: Changed order of message display; removed $sentUser because obviou; renamed to panel-primary, removed bottom receivername 
         $date = new DateTimeExtended($row['msc_timestamp'], 'Y-m-d H:i:s');
         $page->addHtml('
         <div class="panel panel-primary">
             <div class="panel-heading">
-            	<h3>'.$ReceiverName.'</h3>
+            	<h3>'.$receiverName.'</h3>
             	<h4>'.$date->format($gPreferences['system_date'].' '.$gPreferences['system_time']).'</h4>
             </div>
             <div class="panel-body">'.

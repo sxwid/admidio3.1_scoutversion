@@ -422,7 +422,7 @@ if ($getMsgType === 'EMAIL')
     $emailTemplate = str_replace('#sender#', $postName, $emailTemplate);
 
     $modulemessages = new ModuleMessages();
-    $ReceiverName = '';
+    $receiverName = '';
     if (strpos($ReceiverString, '|') > 0)
     {
         $reciversplit = explode('|', $ReceiverString);
@@ -430,12 +430,12 @@ if ($getMsgType === 'EMAIL')
         {
             if (strpos($value, ':') > 0)
             {
-                $ReceiverName .= '; ' . $modulemessages->msgGroupNameSplit($value);
+                $receiverName .= '; ' . $modulemessages->msgGroupNameSplit($value);
             }
             else
             {
                 $user = new User($gDb, $gProfileFields, $value);
-                $ReceiverName .= '; ' . $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
+                $receiverName .= '; ' . $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
             }
         }
     }
@@ -443,19 +443,19 @@ if ($getMsgType === 'EMAIL')
     {
         if (strpos($ReceiverString, ':') > 0)
         {
-            $ReceiverName .= '; ' . $modulemessages->msgGroupNameSplit($ReceiverString);
+            $receiverName .= '; ' . $modulemessages->msgGroupNameSplit($ReceiverString);
         }
         else
         {
             $user = new User($gDb, $gProfileFields, $ReceiverString);
-            $ReceiverName .= '; ' . $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
+            $receiverName .= '; ' . $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
         }
     }
-    $ReceiverName = substr($ReceiverName, 2);
-    $emailTemplate = str_replace('#receiver#', $ReceiverName, $emailTemplate);
+    $receiverName = substr($receiverName, 2);
+    $emailTemplate = str_replace('#receiver#', $receiverName, $emailTemplate);
 
     // prepare body of email with note of sender and homepage
-    $email->setSenderInText($postName, $ReceiverName);
+    $email->setSenderInText($postName, $receiverName);
 
     // set Text
     $email->setText($emailTemplate);
