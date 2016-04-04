@@ -444,8 +444,8 @@ elseif (!isset($messageStatement))
 
     // @ptabaden change Checkboxes
     // todo nur bei terminen?
-    if(isLeiter($gCurrentUser->getValue('usr_id'))==true)
-    {    
+    if(isLeiter($gCurrentUser->getValue('usr_id'))==true && strpos($gNavigation->getPreviousUrl(), 'dates.php') > 0)
+    {                                                             
         $form->addCheckbox('msg_l', "An Leiter", $form_values['msg_l']);
         $form->addCheckbox('msg_p', "An TN", $form_values['msg_p']);
     }
