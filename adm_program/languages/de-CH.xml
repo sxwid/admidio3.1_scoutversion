@@ -92,7 +92,7 @@
         <string name="PHO_ALBUM_LOCK_DESC">Gesperrte Alben können von Besuchern und Mitgliedern nicht eingesehen werden. Du kannst zum Beispiel ein Album vorübergehen sperren, während du gerade alle Bilder des Albums hochlädst.</string>
         <string name="PHO_ALBUM_UNLOCK">Album entsperren</string>
         <string name="PHO_DISPLAY_PHOTOS_DESC">Hier kann eingestellt werden, wie die Fotos im Fotomodul präsentiert werden sollen. Dies kann als modales Fenster geschehen, dann wird im vorhandenen Browserfenster ein neues Fenster geöffnet. Im Hintergrund bleibt die ausgewählte Fotovorschau weiterhin aktiv. Sollen die Bilder im gleichen Fenster dargestellt werden, dann wird die aktuelle Fotovorschau verlassen und eine neue Seite mit dem ausgewählten Foto angezeigt. Soll ein Popup-Fenster erzeugt werden, dann wird ein neues Browserfenster geöffnet in dem das ausgewählte Foto angezeigt wird. Dieses kann dann unabhängig vom Browserfenster mit der Fotovorschau bedient werden. (Standard: Modales Fenster)</string>
-        <string name="PHO_FILE_UPLOADED">Das Bild #VAR1# wurde hochgeladen.</string>
+        <string name="PHO_FILE_UPLOADED">Das Bild #VAR1_BOLD# wurde hochgeladen.</string>
         <string name="PHO_MODAL_WINDOW">Modales Fenster</string>
         <string name="PHO_MAX_PHOTO_SIZE_WIDTH">Max. Bildanzeigegrösse (Breite)</string>
         <string name="PHO_MAX_PHOTO_SIZE_HEIGHT">Max. Bildanzeigegrösse (Höhe)</string>
