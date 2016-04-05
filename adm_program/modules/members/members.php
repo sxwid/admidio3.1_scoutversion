@@ -67,6 +67,7 @@ if($getMembers)
 
 // alle Mitglieder zur Auswahl selektieren
 // unbestaetigte User werden dabei nicht angezeigt
+// @ptabaden: Added pfadiname
 $sql = 'SELECT usr_id, last_name.usd_value as last_name, first_name.usd_value as first_name,
                email.usd_value as email, gender.usd_value as gender, birthday.usd_value as birthday,
                usr_login_name, COALESCE(usr_timestamp_change, usr_timestamp_create) as timestamp,

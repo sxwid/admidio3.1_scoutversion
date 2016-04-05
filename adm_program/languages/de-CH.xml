@@ -1187,6 +1187,7 @@
         <string name="SYS_LASTNAME">Name</string>
         <string name="SYS_LATER">Später</string>
         <string name="SYS_LEADER">Leitende</string>
+        <string name="SYS_LEADER_PARTICIPANT">leitend</string>
         <string name="SYS_LEADERS">Leitende</string>
         <string name="SYS_LINK_TO">Link auf #VAR1#</string>
         <string name="SYS_LOCATION">Ort</string>
@@ -1213,6 +1214,7 @@
         <string name="SYS_MAX_PROCESSABLE_IMAGE_SIZE">max. bearbeitbare Bildgrösse</string>
         <string name="SYS_MEGA_PIXEL">Mega Pixel</string>
         <string name="SYS_MEMBER">Mitglied</string>
+        <string name="SYS_PARTICIPANT">teilnehmend</string>
         <string name="SYS_MEMBER_OF_ORGANIZATION">Mitglied der Organisation #VAR1#</string>
         <string name="SYS_MEMBERS">Mitglieder</string>
         <string name="SYS_MEMORY_LIMIT">Arbeitsspeicher</string>

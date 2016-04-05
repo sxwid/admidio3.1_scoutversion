@@ -127,7 +127,8 @@ else
     // show html list with all users and their membership to this role
 
     // set headline of the script
-    $headline = $gL10n->get('LST_MEMBER_ASSIGNMENT').' - '. $role->getValue('rol_name');
+    // @ptabaden: Changed to rol_description and added dat_date
+    $headline = $role->getValue('rol_description').'<br>'.$gL10n->get('LST_MEMBER_ASSIGNMENT');
 
     // add current url to navigation stack if last url was not the same page
     if(strpos($gNavigation->getUrl(), 'members_assignment.php') === false)
@@ -171,6 +172,7 @@ else
     }
 
      // SQL-Statement zusammensetzen
+    // @ptabaden: Added pfadiname
     $sql = 'SELECT DISTINCT usr_id, last_name.usd_value as last_name, first_name.usd_value as first_name, birthday.usd_value as birthday,
                    city.usd_value as city, address.usd_value as address, zip_code.usd_value as zip_code, country.usd_value as country,
                    mem_usr_id as member_this_role, mem_leader as leader_this_role,
@@ -184,7 +186,8 @@ else
                           AND mem2.mem_rol_id  = rol2.rol_id
                           AND mem2.mem_begin  <= \''.DATE_NOW.'\'
                           AND mem2.mem_end     > \''.DATE_NOW.'\'
-                          AND mem2.mem_usr_id  = usr_id) as member_this_orga
+                          AND mem2.mem_usr_id  = usr_id) as member_this_orga,
+                              pfadiname.usd_value as pfadiname
               FROM '.TBL_USERS.'
          LEFT JOIN '.TBL_USER_DATA.' as last_name
                 ON last_name.usd_usr_id = usr_id
@@ -215,6 +218,9 @@ else
                AND mem.mem_begin  <= \''.DATE_NOW.'\'
                AND mem.mem_end     > \''.DATE_NOW.'\'
                AND mem.mem_usr_id  = usr_id
+         LEFT JOIN '. TBL_USER_DATA. ' as pfadiname
+                ON pfadiname.usd_usr_id = usr_id
+               AND pfadiname.usd_usf_id = '. $gProfileFields->getProperty('PFADINAME', 'usf_id'). '
              WHERE '. $memberCondition. '
           ORDER BY last_name, first_name ';
     $userStatement = $gDb->query($sql);
@@ -299,11 +305,14 @@ else
 
     // get module menu
     $membersAssignmentMenu = $page->getMenu();
-    $membersAssignmentMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
-    if ($gCurrentUser->editUsers())
-    {
-        $membersAssignmentMenu->addItem('menu_item_create_user', $g_root_path.'/adm_program/modules/members/members_new.php', $gL10n->get('MEM_CREATE_USER'), 'add.png');
-    }
+    // @ptabaden: Changed Icon
+    $membersAssignmentMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), '<i class="fa fa-arrow-left" alt="'.$gL10n->get('SYS_BACK').'" title="'.$gL10n->get('SYS_BACK').'"></i><div class="iconDescription">'.$gL10n->get('SYS_BACK').'</div>', '');
+    // @ptabaden: Not important on this page
+    // if ($gCurrentUser->editUsers())
+    // {
+    //     // @ptabaden: Changed Icon
+    //     $membersAssignmentMenu->addItem('menu_item_create_user', $g_root_path.'/adm_program/modules/members/members_new.php', '<i class="fa fa-plus" alt="'.$gL10n->get('MEM_CREATE_USER').'" title="'.$gL10n->get('MEM_CREATE_USER').'"></i><div class="iconDescription">'.$gL10n->get('MEM_CREATE_USER').'</div>', '');
+    // }
     $navbarForm = new HtmlForm('navbar_show_all_users_form', '', $page, array('type' => 'navbar', 'setFocus' => false));
     $sql = 'SELECT rol_id, rol_name, cat_name
               FROM '.TBL_ROLES.'
@@ -314,16 +323,18 @@ else
                AND (  cat_org_id  = '.$gCurrentOrganization->getValue('org_id').'
                    OR cat_org_id IS NULL )
           ORDER BY cat_sequence, rol_name';
-    $navbarForm->addSelectBoxFromSql('filter_rol_id', $gL10n->get('SYS_ROLE'), $gDb, $sql, array('defaultValue' => $getFilterRoleId, 'firstEntry' => $gL10n->get('SYS_ALL')));
+    $navbarForm->addSelectBoxFromSql('filter_rol_id', '', $gDb, $sql, array('defaultValue' => $getFilterRoleId, 'firstEntry' => $gL10n->get('SYS_ALL')));
     $navbarForm->addCheckbox('mem_show_all', $gL10n->get('MEM_SHOW_ALL_USERS'), 0, array('helpTextIdLabel' => 'MEM_SHOW_USERS_DESC'));
     $membersAssignmentMenu->addForm($navbarForm->show(false));
 
     // create table object
-    $table = new HtmlTable('tbl_assign_role_membership', $page, true, true, 'table table-condensed');
+    // @ptabaden: Renamed to fit to member table
+    $table = new HtmlTable('tbl_members', $page, true, true, 'table table-condensed');
     $table->setMessageIfNoRowsFound('SYS_NO_ENTRIES_FOUND');
 
     // create column header to assign role leaders
-    $htmlLeaderColumn = $gL10n->get('SYS_LEADER');
+    // @ptabaden: Added new language value
+    $htmlLeaderColumn = $gL10n->get('SYS_LEADER_PARTICIPANT');
 
     // show icon that leaders have no additional rights
     if($role->getValue('rol_leader_rights') == ROLE_LEADER_NO_RIGHTS)
@@ -349,22 +360,22 @@ else
     }
 
     // create array with all column heading values
+    // @ptabaden: removed first row, removed firstname, moved both checkboxes to end, added pfadiname, added sys_participant value
     $columnHeading = array(
-        '<img class="admidio-icon-info"
-            src="'. THEME_PATH. '/icons/profile.png" alt="'.$gL10n->get('SYS_MEMBER_OF_ORGANIZATION', $gCurrentOrganization->getValue('org_longname')).'"
-            title="'.$gL10n->get('SYS_MEMBER_OF_ORGANIZATION', $gCurrentOrganization->getValue('org_longname')).'" />',
-        $gL10n->get('SYS_MEMBER'),
+        '',
         $gL10n->get('SYS_LASTNAME'),
-        $gL10n->get('SYS_FIRSTNAME'),
-        '<img class="admidio-icon-info" src="'. THEME_PATH. '/icons/map.png"
-            alt="'.$gL10n->get('SYS_ADDRESS').'" title="'.$gL10n->get('SYS_ADDRESS').'" />',
+        $gL10n->get('SYS_VULGO'),
         $gL10n->get('SYS_BIRTHDAY'),
+        $gL10n->get('SYS_PARTICIPANT'),
         $htmlLeaderColumn);
 
-    $table->setColumnAlignByArray(array('left', 'center', 'left', 'left', 'left', 'left', 'left', 'center'));
-    $table->setDatatablesOrderColumns(array(3, 4));
+    // @ptabaden: removed first row, and firstname, changed sortvalue and disable sort
+    $table->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'center', 'center'));
+    $table->setDatatablesOrderColumns(array(2, 3));
     $table->addRowHeadingByArray($columnHeading);
-    $table->disableDatatablesColumnsSort(array(2, 7));
+    $table->disableDatatablesColumnsSort(array(5, 6));
+
+    $irow = 1;  // @ptabaden: Zahler fuer die jeweilige Zeile
 
     // show rows with all organization users
     while($user = $userStatement->fetch())
@@ -372,6 +383,8 @@ else
         $addressText  = ' ';
         $htmlAddress  = '&nbsp;';
         $htmlBirthday = '&nbsp;';
+        // @ptabaden: Added htmlpfadiname
+        $htmlPfadiname = '&nbsp;';
 
         if($user['member_this_orga'] > 0)
         {
@@ -440,18 +453,29 @@ else
             $htmlBirthday = $birthdayDate->format($gPreferences['system_date']);
         }
 
+        // @ptabaden: Added pfadiname
+        if(strlen($user['pfadiname']) > 0)
+        {
+            $htmlPfadiname = $user['pfadiname'];
+        }
+        else
+        {
+            $htmlPfadiname = '&ndash;';
+        }
+
         // create array with all column values
+        // @ptabaden: removed first row and firstname row, added Pfadiname
         $columnValues = array(
-            array('value' => '<img class="admidio-icon-info" src="'. THEME_PATH.'/icons/'.$icon.'" alt="'.$iconText.'" title="'.$iconText.'" />',
-                  'order' => $memberOfThisOrganization),
-            $htmlMemberStatus,
-            '<a href="'.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='.$user['usr_id'].'">'.$user['last_name'].'</a>',
-            '<a href="'.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='.$user['usr_id'].'">'.$user['first_name'].'</a>',
-            array('value' => $htmlAddress, 'order' => $addressText),
+            $irow,
+            '<a href="'.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='.$user['usr_id'].'">'.$user['last_name'].'</a>, <a href="'.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='.$user['usr_id'].'">'.$user['first_name'].'</a>',
+            $htmlPfadiname,
             $htmlBirthday,
+            $htmlMemberStatus,
             $htmlRoleLeader.'<b id="loadindicator_leader_'.$user['usr_id'].'"></b>');
 
         $table->addRowByArray($columnValues, 'userid_'.$user['usr_id']);
+        // @ptabaden: Added counter
+        ++$irow;
     }//End While
 
     $page->addHtml($table->show(false));
