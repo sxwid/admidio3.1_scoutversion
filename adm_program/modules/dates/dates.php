@@ -627,14 +627,24 @@ else
                 <div class="panel panel-primary'.$cssClassHighlight.'" id="dat_'.$date->getValue('dat_id').'">
                     <div class="panel-heading">
                         <h2>
-                            '.$date->getValue('dat_headline').'
+                            '.$date->getValue('cat_name').': '.$date->getValue('dat_headline').'
                         </h2>
 			            <div class="date-info"><h4>' .
                             $date->getValue('dat_begin', $gPreferences['system_date']).$outputEndDate.'<div class="date-actions">'.$outputButtonIcal . $outputButtonCopy . $outputButtonEdit . $outputButtonDelete . '
-                        </h4></div>
-			            <h4>'.$date->getValue('dat_begin', $gPreferences['system_time']).' &ndash; '.$date->getValue('dat_end', $gPreferences['system_time']). ' '.$gL10n->get('SYS_CLOCK').'</h4><h4>'.$outputLinkLocation.'</h4>
-                    </div>');
-                    if($date->getValue('dat_rol_id') > 0 && $gValidLogin)
+                        </h4></div>');
+
+                    // @ptabaden: Only show time if not all day event
+                    if ($date->getValue('dat_all_day') == 0)
+                    {
+                        $page->addHtml('<h4>'.$date->getValue('dat_begin', $gPreferences['system_time']).' &ndash; '.$date->getValue('dat_end', $gPreferences['system_time']). ' '.$gL10n->get('SYS_CLOCK').'</h4>');
+                    }
+                    if($outputLinkLocation !== '')
+                    {
+                        $page->addHtml('<h4>'.$outputLinkLocation.'</h4>');
+                    }
+                        $page->addHtml('</div>');
+
+                    if($outputNumberLeaders > 0 || $outputNumberMembers > 0 && $gValidLogin)
                     {
                         $page->addHtml('<h4>');
                         
@@ -712,21 +722,33 @@ else
                 $columnValues[] = '&nbsp;';
             }
 
-            if($dateBegin === $dateEnd)
-            {
-                $dateBeginAndEnd = '<h4 id="event_date">'.$dateBegin.'</h4>';
-            }
-            else
-            {
-                $dateBeginAndEnd = '<h4 id="event_date">'.$dateBegin.'<br>'. $dateEnd.'</h4>';
-            }
+            $dateBeginAndEnd = '<h4 id="event_date">'.$dateBegin.'</h4>';
 
             if($getViewMode === 'html')
             {
                 // @ptabaden: Placed back the link to detailed view
-                $columnValues[] = $dateBeginAndEnd.'<div id="event" class="table_group"><h2 id="event_title"><a href="'.$g_root_path.'/adm_program/modules/dates/dates.php?id='.$date->getValue('dat_id').'&amp;view_mode=html&view=detail&amp;headline='.$date->getValue('dat_headline').'">'.$date->getValue('cat_name').': '.$date->getValue('dat_headline').'</a></h2>'
-                .$timeBegin.'<div>'.$outputLinkLocation.'</div>';
-
+                if($date->getValue('dat_begin', $gPreferences['system_date']) === $date->getValue('dat_end', $gPreferences['system_date']))
+                {
+                    if ($date->getValue('dat_all_day'))
+                    {
+                        $columnValues[] = $dateBeginAndEnd.'<div id="event" class="table_group"><h2 id="event_title"><a href="'.$g_root_path.'/adm_program/modules/dates/dates.php?id='.$date->getValue('dat_id').'&amp;view_mode=html&view=detail&amp;headline='.$date->getValue('dat_headline').'">'.$date->getValue('cat_name').': '.$date->getValue('dat_headline').'</a></h2><div>'.$outputLinkLocation.'</div>';
+                    }
+                    else 
+                    {
+                        $columnValues[] = $dateBeginAndEnd.'<div id="event" class="table_group"><h2 id="event_title"><a href="'.$g_root_path.'/adm_program/modules/dates/dates.php?id='.$date->getValue('dat_id').'&amp;view_mode=html&view=detail&amp;headline='.$date->getValue('dat_headline').'">'.$date->getValue('cat_name').': '.$date->getValue('dat_headline').'</a></h2>'.$timeBegin.'<div>'.$outputLinkLocation.'</div>';
+                    }
+                }
+                else
+                {
+                    if ($date->getValue('dat_all_day'))
+                    {
+                        $columnValues[] = $dateBeginAndEnd.'<div id="event" class="table_group"><h2 id="event_title"><a href="'.$g_root_path.'/adm_program/modules/dates/dates.php?id='.$date->getValue('dat_id').'&amp;view_mode=html&view=detail&amp;headline='.$date->getValue('dat_headline').'">'.$date->getValue('cat_name').': '.$date->getValue('dat_headline').'</a></h2><div>bis '.$date->getValue('dat_end', $gPreferences['system_date']).'<br>'.$outputLinkLocation.'</div>';
+                    }
+                    else 
+                    {
+                        $columnValues[] = $dateBeginAndEnd.'<div id="event" class="table_group"><h2 id="event_title"><a href="'.$g_root_path.'/adm_program/modules/dates/dates.php?id='.$date->getValue('dat_id').'&amp;view_mode=html&view=detail&amp;headline='.$date->getValue('dat_headline').'">'.$date->getValue('cat_name').': '.$date->getValue('dat_headline').'</a></h2>'.$timeBegin.'<div>'.$outputLinkLocation.'</div>';
+                    }
+                }
             }
             else
             {
