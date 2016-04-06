@@ -303,7 +303,7 @@ else
         // set end date of event
         if($date->getValue('dat_begin', $gPreferences['system_date']) != $date->getValue('dat_end', $gPreferences['system_date']))
         {
-            $outputEndDate = ' - '.$date->getValue('dat_end', $gPreferences['system_date']);
+            $outputEndDate = ' &ndash; '.$date->getValue('dat_end', $gPreferences['system_date']);
         }
 
         if($getViewMode === 'html')
