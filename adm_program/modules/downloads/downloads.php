@@ -141,17 +141,16 @@ if (isset($folderContent['folders']))
         $folderDescription = '';
         if(strlen($nextFolder['fol_description']) > 0)
         {
-            $folderDescription = '<img class="admidio-icon-help" src="'. THEME_PATH. '/icons/info.png" data-toggle="popover" data-trigger="hover"
-                data-placement="right" title="'.$gL10n->get('SYS_DESCRIPTION').'" data-content="'.$nextFolder['fol_description'].'" alt="Info" />';
+            $folderDescription = '';
         }
 
         // create array with all column values
         // @ptabaden: Removed counter and separate col for file-type icon
-        // @ptabaden: added h3
+        // @ptabaden: added h4
         $columnValues = array(
             1, // Type folder
             '<a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/downloads/downloads.php?folder_id='. $nextFolder['fol_id']. '">
-                <i class="fa fa-folder file-icon" alt="'.$gL10n->get('SYS_FOLDER').'" title="'.$gL10n->get('SYS_FOLDER').'"></i><h3>'. $nextFolder['fol_name']. '</h3></a>'.$folderDescription,
+                <h4><i class="fa fa-folder file-icon" alt="'.$gL10n->get('SYS_FOLDER').'" title="'.$gL10n->get('SYS_FOLDER').'"></i>'. $nextFolder['fol_name']. '</h4></a>'.$folderDescription,
             '',
             ''
         );
@@ -206,20 +205,19 @@ if (isset($folderContent['files']))
         $fileDescription = '';
         if($nextFile['fil_description'] != '')
         {
-            $fileDescription = '<img class="admidio-icon-help" src="'. THEME_PATH. '/icons/info.png" data-toggle="popover" data-trigger="hover"
-                data-placement="right" title="'.$gL10n->get('SYS_DESCRIPTION').'" data-content="'.$nextFile['fil_description'].'" alt="Info" />';
+            $fileDescription = '';
         }
 
         // create array with all column values
         // @ptabaden: Changed file icons to Font Awesome icons
         // @ptabaden: Removed counter and separate col for file-type icon
-        // @ptabaden: added h3
+        // @ptabaden: added h4
         $columnValues = array(
             2, // Type file
             '<a href="'.$g_root_path.'/adm_program/modules/downloads/get_file.php?file_id='. $nextFile['fil_id']. '">
-                <i class="'.$iconFile.' file-icon" alt="'.$gL10n->get('SYS_FILE').'" title="'.$gL10n->get('SYS_FILE').'"></i><h3>'. $nextFile['fil_name']. '</h3></a>'.$fileDescription,
-            $timestamp->format($gPreferences['system_date'].' '.$gPreferences['system_time']),
-            $nextFile['fil_size']. ' kB&nbsp;'
+                <h4><i class="'.$iconFile.' file-icon" alt="'.$gL10n->get('SYS_FILE').'" title="'.$gL10n->get('SYS_FILE').'"></i>'. $nextFile['fil_name']. '</h4></a>'.$fileDescription,
+            '<h5>'.$timestamp->format($gPreferences['system_date']).'</h5>',
+            '<h5>'.$nextFile['fil_size']. 'kB</h5>'
         );
 
         if ($gCurrentUser->editDownloadRight())
@@ -314,7 +312,7 @@ if ($gCurrentUser->editDownloadRight())
 
                 $columnValues = array('<img src="'. THEME_PATH. '/icons/'.$iconFile.'" alt="'.$gL10n->get('SYS_FILE').'" title="'.$gL10n->get('SYS_FILE').'" /></a>',
                                       $nextFile['fil_name'],
-                                      $nextFile['fil_size']. ' kB&nbsp;',
+                                      $nextFile['fil_size']. 'kB',
                                       '<a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/downloads/download_function.php?mode=6&amp;folder_id='.$getFolderId.'&amp;name='. urlencode($nextFile['fil_name']). '">
                                           <img src="'. THEME_PATH. '/icons/database_in.png" alt="'.$gL10n->get('DOW_ADD_TO_DATABASE').'" title="'.$gL10n->get('DOW_ADD_TO_DATABASE').'" /></a>');
                 $adminTable->addRowByArray($columnValues);
