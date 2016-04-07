@@ -614,6 +614,8 @@
         <string name="LST_ACTIVE_FORMER_MEMBERS">Aktive und ehemalige Mitglieder</string>
         <string name="LST_ACTIVE_MEMBERS">Aktive Mitglieder</string>
         <string name="LST_ACTIVE_ROLES">Mitgliederlisten</string>
+        <string name="LST_ADD_COLUMN">Spalte hinzufügen</string>
+        <string name="LST_ADD_COLUMNS_DESC">Ordne in der folgenden Tabelle beliebig vielen Spalten entsprechende Profilfelder zu. Zusätzlich kannst du die Standardsortierung vorgeben und Bedingungen zu Feldern hinzufügen, nach denen die jeweiligen Mitglieder gefiltert werden sollen.</string>
         <string name="LST_ADD_ANOTHER_COLUMN">Weitere Spalte hinzufügen</string>
         <string name="LST_CHANGE_LIST">Möchtest du eine gespeicherte Konfiguration laden und verändern oder eine neue Listenkonfiguration erstellen?</string>
         <string name="LST_CHOOSE_ROLE">Wähle eine Rolle aus, von der du die konfigurierte Mitgliederliste anzeigen möchtest.</string>
@@ -662,8 +664,9 @@
         <string name="LST_PRESET_CONFIGURATION_DESC">Als Webmaster kannst du Konfigurationen erstellen, welche allen Benutzern des Systems zur Verfügung stehen. Konfiguriere die entsprechende Spalten und Bedingungen und speichere diese unter dem gewünschten Namen. Wähle nun die neu erstellte Liste aus und klick auf dieses Symbol: #VAR1#</string>
         <string name="LST_PRINT_PREVIEW">Druckvorschau</string>
         <string name="LST_ROLE_INFORMATION">Rolleninformationen</string>
-        <string name="LST_SAVE_CONFIGURATION">Konfiguration speichern</string>
         <string name="LST_SAVE_CONFIGURATION_OTHER_NAME">Konfiguration unter anderem Namen speichern</string>
+        <string name="LST_SAVE_CHANGES">Änderungen speichern</string>
+        <string name="LST_SAVE_CONFIGURATION">Konfiguration speichern</string>
         <string name="LST_SEARCH_AGE_EXAMPLE">18j</string>
         <string name="LST_SEARCH_AGE_DESC">Sucht alle Benutzer, die älter als 18 Jahre sind</string>
         <string name="LST_SEARCH_DATE_EXAMPLE">01.03.1986</string>
@@ -678,6 +681,8 @@
         <string name="LST_SEARCH_TELEFON_DESC">Sucht alle Benutzer, deren Telefonnummer 241 enthält und mit 54 endet</string>
         <string name="LST_SEARCH_YES_NO_FIELD">Ja/Nein Feld</string>
         <string name="LST_SEARCH_YES_NO_FIELD_DESC">Sucht alle Benutzer bei denen ein Häckchen gesetzt wurde</string>
+        <string name="LST_SELECT_CONFIGURATION">Konfiguration auswählen</string>
+        <string name="LST_SELECT_MEMBERS">Mitglieder auswählen</string>
         <string name="LST_SET_COLUMNS">Bestimme die Spalten, die in der Liste angezeigt werden sollen</string>
         <string name="LST_SHOW_LIST">Liste anzeigen</string>
         <string name="LST_SHOW_LISTS">Listen anzeigen</string>
@@ -1110,6 +1115,7 @@
         <string name="SYS_CONTRIBUTION_PERIOD">Beitragszeitraum</string>
         <string name="SYS_COOKIE_NOT_SET">Der Login kann nicht durchgeführt werden, da dein Browser das Setzen von Cookies verbietet!\n\nDamit du dich erfolgreich anmelden kannst, musst du deinen Browser so einstellen, dass dieser Cookies von #VAR1_BOLD# akzeptiert.</string>
         <string name="SYS_COPY">Kopieren</string>
+        <string name="SYS_COPY_VAR">#VAR1# kopieren</string>
         <string name="SYS_COUNTRY">Land</string>
         <string name="SYS_CREATE">Anlegen</string>
         <string name="SYS_CREATE_VAR">Neu</string>
