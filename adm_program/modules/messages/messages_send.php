@@ -517,7 +517,8 @@ else
 }
 
 // message if send/save is OK
-if ($sendResult)
+// @ptabaden: update 3.1.3
+if ($sendResult === true) // don't remove check === true. ($sendResult) won't work
 {
     // save mail also to database
     if ($getMsgType !== 'PM' && $gValidLogin)

@@ -263,9 +263,10 @@ class Session extends TableAccess
 
         // check if current connection has same ip address as of session initialization
         // if config parameter $gCheckIpAddress = 0 then don't check ip address
+        // @ptabaden: update 3.1.3
         if($this->getValue('ses_ip_address') !== $_SERVER['REMOTE_ADDR']
         && $this->getValue('ses_ip_address') !== ''
-        && (!isset($gCheckIpAddress) || $gCheckIpAddress === 1))
+        && (isset($gCheckIpAddress) && $gCheckIpAddress === 1))
         {
             if($gDebug)
             {

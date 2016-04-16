@@ -68,9 +68,10 @@ $datesResult = $dates->getDataset(0, 0);
 $parameter = $dates->getParameters();
 
 // Headline for file name
+// @ptabaden: Admidio 3.1.3 change
 if($getCatId > 0)
 {
-    $calendar = new TableCategory($gDb, $dates->getCatId());
+    $calendar = new TableCategory($gDb, $getCatId);
     $getHeadline.= '_'. $calendar->getValue('cat_name');
 }
 

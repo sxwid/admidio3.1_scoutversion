@@ -42,8 +42,8 @@ if($gValidLogin)
     $gMessage->setForwardUrl($g_root_path.'/adm_program/', 2000);
     $gMessage->show($gL10n->get('SYS_LOSTPW_AREADY_LOGGED_ID'));
 }
-
-if(!empty($_POST['recipient_email']) && !empty($_POST['captcha']))
+// @ptabaden: Update to 3.1.3
+if(!empty($_POST['recipient_email']))
 {
     try
     {

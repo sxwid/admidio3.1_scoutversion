@@ -73,6 +73,7 @@ class Email extends PHPMailer
     public function __construct()
     {
         // Übername Einstellungen
+        // @ptabaden: update 3.1.3
         global $gL10n, $gPreferences, $gDebug;
 
         parent::__construct(true);
@@ -82,6 +83,8 @@ class Email extends PHPMailer
         $this->emSendAsHTML     = false;
         $this->emText           = '';    // content of text part
         $this->emHtmlText       = '';    // content of html part
+        $this->exceptions       = true;  // enable exceptions in PHPMailer
+        $this->Timeout          = 30;    // set timeout to 30 seconds
 
         // Hier werden noch mal alle Empfaenger der Mail reingeschrieben,
         // fuer den Fall das eine Kopie der Mail angefordert wird...

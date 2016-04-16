@@ -830,7 +830,8 @@ class User extends TableUsers
                     foreach($this->rolesMembershipLeader as $roleId => $leaderRights)
                     {
                         // is group leader of role and has the right to edit users ?
-                        if(in_array($roleId, $rolesMembership, true) && $leaderRights > 1)
+                        // @ptabaden: update to 3.1.3
+                        if(in_array($roleId, $rolesMembership) && $leaderRights > 1)
                         {
                             $returnValue = true;
                         }
