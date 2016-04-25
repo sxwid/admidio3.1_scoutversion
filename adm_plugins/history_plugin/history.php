@@ -24,7 +24,7 @@ require_once(SERVER_PATH. '/adm_plugins/history_plugin/history_classes.php');
 unset($_SESSION['historys_request']);
 
 // Initialize and check the parameters
-$getHeadline = 'Porträt';
+$getHeadline = 'Portr&auml;t';
 $getId       = '1';
 
 // create object for announcements
