@@ -644,7 +644,7 @@ else
                     }
                         $page->addHtml('</div>');
 
-                    if($outputNumberLeaders > 0 || $outputNumberMembers > 0 && $gValidLogin)
+                    if($outputNumberLeaders > 0 && $gValidLogin || $outputNumberMembers > 0 && $gValidLogin)
                     {
                         $page->addHtml('<h4>');
                         
