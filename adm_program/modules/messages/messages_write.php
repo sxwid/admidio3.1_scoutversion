@@ -358,7 +358,7 @@ elseif (!isset($messageStatement))
         if($getRoleId === 0 && count($listVisibleRoleArray) > 0)
         {
             // if no special role was preselected then list users
-            $sql = 'SELECT usr_id, first_name.usd_value as first_name, last_name.usd_value as last_name, rol_id, mem_begin, mem_end
+            $sql = 'SELECT usr_id, first_name.usd_value as first_name, last_name.usd_value as last_name, scout_name.usd_value as scout_name, rol_id, mem_begin, mem_end
                       FROM '.TBL_MEMBERS.'
                 INNER JOIN '.TBL_ROLES.'
                         ON rol_id = mem_rol_id
@@ -376,6 +376,9 @@ elseif (!isset($messageStatement))
                  LEFT JOIN '.TBL_USER_DATA.' as first_name
                         ON first_name.usd_usr_id = usr_id
                        AND first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
+                 LEFT JOIN '.TBL_USER_DATA.' as scout_name
+                        ON scout_name.usd_usr_id = usr_id
+                       AND scout_name.usd_usf_id = '. $gProfileFields->getProperty('PFADINAME', 'usf_id'). '
                      WHERE rol_id in ('.implode(',', $listVisibleRoleArray).')
                        AND mem_begin <=  \''.DATE_NOW.'\'
                        AND usr_id <> '.$gCurrentUser->getValue('usr_id').
@@ -395,12 +398,26 @@ elseif (!isset($messageStatement))
                     // if membership is active then show them as active members
                     if($row['mem_begin'] <= DATE_NOW && $row['mem_end'] >= DATE_NOW)
                     {
-                        $active_list[]= array($row['usr_id'], $row['last_name'].' '.$row['first_name'], $gL10n->get('LST_ACTIVE_MEMBERS'));
+                        if(strlen($row['scout_name'])!=0)
+                        {
+                            $active_list[]= array($row['usr_id'], $row['last_name'].' '.$row['first_name']. ' v/o '.$row['scout_name'], $gL10n->get('LST_ACTIVE_MEMBERS'));
+                        }
+                        else
+                        {
+                            $active_list[]= array($row['usr_id'], $row['last_name'].' '.$row['first_name'], $gL10n->get('LST_ACTIVE_MEMBERS'));                            
+                        }
                         $currentUserId = $row['usr_id'];
                     }
                     elseif($gPreferences['mail_show_former'] == 1)
                     {
-                        $passive_list[]= array($row['usr_id'], $row['last_name'].' '.$row['first_name'], $gL10n->get('LST_FORMER_MEMBERS'));
+                        if(strlen($row['scout_name'])!=0)
+                        {
+                            $passive_list[]= array($row['usr_id'], $row['last_name'].' '.$row['first_name']. ' v/o '.$row['scout_name'], $gL10n->get('LST_FORMER_MEMBERS'));
+                        }
+                        else
+                        {
+                            $passive_list[]= array($row['usr_id'], $row['last_name'].' '.$row['first_name'], $gL10n->get('LST_FORMER_MEMBERS'));                            
+                        }
                         $currentUserId = $row['usr_id'];
                     }
                 }
