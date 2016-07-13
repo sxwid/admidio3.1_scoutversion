@@ -1131,6 +1131,7 @@
         <string name="SYS_LOCK">Sperren</string>
         <string name="SYS_LOCKED">Gesperrt</string>
         <string name="SYS_LOGIN">Anmelden</string>
+        <string name="SYS_LOGIN_MAX_INVALID_LOGIN">Du hast mehrmals innerhalb kurzer Zeit versucht, dich mit einem falschen Passwort einzuloggen.\nAus Sicherheitsgründen ist dein Zugang für 15 Minuten gesperrt.</string>
         <string name="SYS_LOGIN_FAILED">Du hast mehrmals innerhalb kurzer Zeit versucht, dich mit einem falschen Passwort einzuloggen.\nAus Sicherheitsgründen ist dein Zugang für 15 Minuten gesperrt.</string>
         <string name="SYS_LOGIN_NOT_ACTIVATED">Deine Anmeldung wurde noch nicht freigeschaltet.\n\nDu wirst benachrichtigt, sobald deine Anmeldung freigeschaltet wurde und ein Login möglich ist.</string>
         <string name="SYS_LOGIN_PROBLEMS">Anmeldeprobleme</string>
