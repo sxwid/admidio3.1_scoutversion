@@ -376,7 +376,15 @@ if($photoAlbum->getValue('pho_quantity') > 0)
 
 
     // show information about user who creates the recordset and changed it
-    $page->addHtml(admFuncShowCreateChangeInfoById($photoAlbum->getValue('pho_usr_id_create'), $photoAlbum->getValue('pho_timestamp_create'), $photoAlbum->getValue('pho_usr_id_change'), $photoAlbum->getValue('pho_timestamp_change')));
+    // @ptabaden: Workaround to show correct link if albumcreator != albumchanger because of removed entry in layout
+    if(strlen($photoAlbum->getValue('pho_usr_id_change'))>0)
+        {
+            $page->addHtml(admFuncShowCreateChangeInfoById($photoAlbum->getValue('pho_usr_id_change'), $photoAlbum->getValue('pho_timestamp_change'), $photoAlbum->getValue('pho_usr_id_change'), $photoAlbum->getValue('pho_timestamp_change')));
+        }
+    else
+        {
+            $page->addHtml(admFuncShowCreateChangeInfoById($photoAlbum->getValue('pho_usr_id_create'), $photoAlbum->getValue('pho_timestamp_create'), $photoAlbum->getValue('pho_usr_id_change'), $photoAlbum->getValue('pho_timestamp_change')));
+        }
 
     // show page navigations through thumbnails
     $url = $g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$photoAlbum->getValue('pho_id');
