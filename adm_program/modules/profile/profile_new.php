@@ -203,7 +203,8 @@ foreach($gProfileFields->mProfileFields as $field)
                 $fieldProperty = FIELD_DEFAULT;
                 $fieldHelpId   = 'PRO_USERNAME_DESCRIPTION';
 
-                if(!$gCurrentUser->isWebmaster() && $getNewUser === 0)
+                // @ptabaden: Not only webmaster can add username to new user
+                if(!$gCurrentUser->editUsers() && $getNewUser === 0)
                 {
                     $fieldProperty = FIELD_DISABLED;
                     $fieldHelpId   = '';
@@ -237,7 +238,8 @@ foreach($gProfileFields->mProfileFields as $field)
                     // Webmasters are allowed to change password if no login was configured or no email is set to send a generated password.
                     if(isMember($user->getValue('usr_id'))
                     && ($gCurrentUser->getValue('usr_id') == $user->getValue('usr_id')
-                       || ($gCurrentUser->isWebmaster()
+                    //@ptabaden: not only webmaster can send email for new pw
+                        || ($gCurrentUser->editUsers()
                           && (strlen($user->getValue('usr_login_name')) === 0 || strlen($user->getValue('EMAIL')) === 0))))
                     {
                         $form->addCustomContent($gL10n->get('SYS_PASSWORD'), '

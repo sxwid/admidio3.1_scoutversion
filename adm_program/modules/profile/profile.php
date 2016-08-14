@@ -221,7 +221,8 @@ if($user->getValue('usr_id') == $gCurrentUser->getValue('usr_id'))
     $profileMenu->addItem('menu_item_password', $g_root_path. '/adm_program/modules/profile/password.php?usr_id='. $user->getValue('usr_id'),
                         '<i class="fa fa-unlock-alt" alt="'.$gL10n->get('PRO_EDIT_PROFILE').'" title="'.$gL10n->get('PRO_EDIT_PROFILE').'"></i><div class="iconDescription">'.$gL10n->get('SYS_CHANGE_PASSWORD').'</div>', '');
 }
-elseif($gCurrentUser->isWebmaster() && isMember($user->getValue('usr_id'))
+// @ptabaden: email can be sent from all allowed users
+elseif($gCurrentUser->editUsers() && isMember($user->getValue('usr_id'))
 && strlen($user->getValue('usr_login_name')) > 0)
 {
     // Webmasters can change or send password if login is configured and user is member of current organization
@@ -265,7 +266,8 @@ if($gCurrentUser->assignRoles())
                             $gL10n->get('ROL_ROLE_MEMBERSHIPS_CHANGE'), 'roles.png', 'right', 'menu_item_extras');
 }
 
-if($gCurrentUser->isWebmaster())
+// @ptabaden: show menu for all allowed users
+if($gCurrentUser->editUsers())
 {
     // show link to maintain profile fields
     $profileMenu->addItem('menu_item_maintain_profile_fields', $g_root_path. '/adm_program/modules/preferences/fields.php',

@@ -166,7 +166,8 @@ elseif($getMode === 4)
     // nur Webmaster duerfen User neue Zugangsdaten zuschicken
     // nur ausfuehren, wenn E-Mails vom Server unterstuetzt werden
     // nur an Mitglieder der eigenen Organisation schicken
-    if(!$gCurrentUser->isWebmaster() || $gPreferences['enable_system_mails'] != 1 || !$this_orga)
+    // @ptabaden: Changed that not only webmaster can add username and send pw email
+    if(!$gCurrentUser->editUsers() || $gPreferences['enable_system_mails'] != 1 || !$this_orga)
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     }

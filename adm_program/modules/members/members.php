@@ -176,7 +176,8 @@ $membersAdministrationMenu->addItem('menu_item_extras', null, $gL10n->get('SYS_M
 $membersAdministrationMenu->addItem('menu_item_import_users', $g_root_path.'/adm_program/modules/members/import.php',
                             $gL10n->get('MEM_IMPORT_USERS'), 'database_in.png', 'right', 'menu_item_extras');
 
-if($gCurrentUser->isWebmaster())
+// @ptabaden: Changed that not only webmaster can add username and send pw email
+if($gCurrentUser->editUsers())
 {
     // show link to maintain profile fields
     $membersAdministrationMenu->addItem('menu_item_maintain_profile_fields', $g_root_path. '/adm_program/modules/preferences/fields.php',
