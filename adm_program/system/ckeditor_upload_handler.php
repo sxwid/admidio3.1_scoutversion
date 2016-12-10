@@ -59,6 +59,9 @@ try
         case 'hist_description':
             $folderName = 'history';
             break;
+        case 'support_description':
+            $folderName = 'support';
+            break;
         case 'sts_description':
             $folderName = 'sts';
             break;

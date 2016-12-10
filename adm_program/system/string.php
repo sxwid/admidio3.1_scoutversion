@@ -69,6 +69,7 @@ function admStrStripTagsSpecial($srcArray)
         && $key !== 'mail_smtp_password'
         //@ptabaden change plugins
         && $key !== 'hist_description' 
+        && $key !== 'support_description' 
         && $key !== 'sts_description')
         {
             $srcArray[$key] = strStripTags($value);
