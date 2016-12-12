@@ -249,7 +249,7 @@ if (isset($folderContent['files']))
 
 // Create download table
 $downloadOverview->setDatatablesColumnsHide(array(1));
-$downloadOverview->setDatatablesOrderColumns(array(1, 3));
+$downloadOverview->setDatatablesOrderColumns(array(1));
 $htmlDownloadOverview = $downloadOverview->show(false);
 
 /**************************************************************************/
