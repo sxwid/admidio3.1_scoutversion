@@ -161,7 +161,13 @@ class HtmlPage
 
         $this->menu->addItem('menu_item_overview', '/adm_plugins/sts_plugin/sts.php',
                             $gL10n->get('SYS_OVERVIEW'), '', 'right', 'navbar', 'admidio-default-menu-item');
-                            
+         
+        if($gPreferences['enable_announcements_module'] == 1
+        || ($gPreferences['enable_announcements_module'] == 2 && $gValidLogin))
+        {
+            $this->menu->addItem('menu_item_announcements', '/adm_program/modules/announcements/announcements.php',
+                                $gL10n->get('ANN_ANNOUNCEMENTS'), '', 'right', 'navbar', 'admidio-default-menu-item');
+        }                   
 
         if($gPreferences['enable_dates_module'] == 1
         || ($gPreferences['enable_dates_module'] == 2 && $gValidLogin))
@@ -169,17 +175,13 @@ class HtmlPage
             $this->menu->addItem('menu_item_dates', '/adm_program/modules/dates/dates.php',
                                 $gL10n->get('DAT_DATES'), '', 'right', 'navbar', 'admidio-default-menu-item');
         }
-        		
-        if($gPreferences['enable_announcements_module'] == 1
-        || ($gPreferences['enable_announcements_module'] == 2 && $gValidLogin))
-        {
-            $this->menu->addItem('menu_item_announcements', '/adm_program/modules/announcements/announcements.php',
-                                $gL10n->get('ANN_ANNOUNCEMENTS'), '', 'right', 'navbar', 'admidio-default-menu-item');
-        }
         
         // @ptabaden: Added History Module
         $this->menu->addItem('menu_item_history', '/adm_plugins/history_plugin/history.php',
-                                            'Porträt', '', 'right', 'navbar', 'admidio-default-menu-item');
+                                            'Portr&auml;t', '', 'right', 'navbar', 'admidio-default-menu-item');
+
+        $this->menu->addItem('support', '/adm_plugins/support_plugin/support.php',
+                                            'Unterst&uuml;tzen', '', 'right', 'navbar', 'admidio-default-menu-item');
                                             
 		if($gPreferences['enable_photo_module'] == 1
 		|| ($gPreferences['enable_photo_module'] == 2 && $gValidLogin))
