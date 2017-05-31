@@ -299,9 +299,8 @@ $form->openGroupBox('gb_visibility_registration', '<h3>'.$gL10n->get('DAT_VISIBI
     // @ptabaden: date registration possible true as standart
     $form->addCheckbox('date_registration_possible', $gL10n->get('DAT_REGISTRATION_POSSIBLE'), $dateRegistrationPossible = true, array('helpTextIdLabel' => 'DAT_LOGIN_POSSIBLE'));
     $form->addCheckbox('date_current_user_assigned', $gL10n->get('DAT_PARTICIPATE_AT_DATE'), $dateCurrentUserAssigned, array('helpTextIdLabel' => 'DAT_PARTICIPATE_AT_DATE_DESC'));
-    // @ptabaden: deactivated: Seldom of use for pta
-//    $form->addInput('dat_max_members', $gL10n->get('DAT_PARTICIPANTS_LIMIT'), $date->getValue('dat_max_members'),
-//                    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999, 'helpTextIdLabel' => 'DAT_MAX_MEMBERS'));
+    // @ptabaden: acitvated max amount again (May 2017)
+    $form->addInput('dat_max_members', $gL10n->get('DAT_PARTICIPANTS_LIMIT'), $date->getValue('dat_max_members'), array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999, 'helpTextIdLabel' => 'DAT_MAX_MEMBERS'));
 $form->closeGroupBox();
 // @ptabaden: added h3
 $form->openGroupBox('gb_description', '<h3>'.$gL10n->get('SYS_DESCRIPTION').'</h3>', 'admidio-panel-editor');
