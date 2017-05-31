@@ -201,7 +201,7 @@ if($getViewMode === 'html')
     // @ptabaden: Deleted filter from to
     $FilterNavbar->addForm($form->show(false));
     $page->addHtml($FilterNavbar->show(false));
-    
+
 }
 elseif($getViewMode === 'print')
 {
@@ -298,7 +298,7 @@ else
         $participantsArray   = array();
 
         // @ptabaden: added two values:
-        $locationHtmlValue = '';        
+        $locationHtmlValue = '';
 
         // set end date of event
         if($date->getValue('dat_begin', $gPreferences['system_date']) != $date->getValue('dat_end', $gPreferences['system_date']))
@@ -476,8 +476,11 @@ else
                     // Check limit of participants
                     if($participants->getCount($date->getValue('dat_rol_id')) >= $date->getValue('dat_max_members'))
                     {
-                        $participationPossible = false;
-                    }
+                        //@ptabaden: Only set $participationPossible to false for Members, not for Leaders (May 2017)
+                        if(isLeiter($gCurrentUser->getValue('usr_id'))==false)
+                        {
+                            $participationPossible = false;
+                        }                    }
                 }
 
                 if($participationPossible)
@@ -647,25 +650,25 @@ else
                     if($outputNumberLeaders > 0 && $gValidLogin || $outputNumberMembers > 0 && $gValidLogin)
                     {
                         $page->addHtml('<h4>');
-                        
-                        if($outputNumberLeaders > 0 ) 
+
+                        if($outputNumberLeaders > 0 )
                         {
                         $page->addHtml($outputNumberLeaders.' '.$gL10n->get('SYS_LEADER'));
                         }
-                        
+
                         if($outputNumberLeaders > 0 && $outputNumberMembers > 0)
                         {
                         $page->addHtml(', ');
                         }
-                        
-                        if($outputNumberMembers > 0) 
+
+                        if($outputNumberMembers > 0)
                         {
                         $page->addHtml($outputNumberMembers.' '.$gL10n->get('SYS_PARTICIPANTS'));
                         }
                         $page->addHtml('</h4>');
                     }
                     $page->addHtml('
-                    
+
 
                     <div class="panel-body">
                         <p>' . $date->getValue('dat_description') . '</p>');
@@ -733,7 +736,7 @@ else
                     {
                         $columnValues[] = $dateBeginAndEnd.'<div id="event" class="table_group"><h2 id="event_title"><a href="'.$g_root_path.'/adm_program/modules/dates/dates.php?id='.$date->getValue('dat_id').'&amp;view_mode=html&view=detail&amp;headline='.$date->getValue('dat_headline').'">'.$date->getValue('cat_name').': '.$date->getValue('dat_headline').'</a></h2><div>'.$outputLinkLocation.'</div>';
                     }
-                    else 
+                    else
                     {
                         $columnValues[] = $dateBeginAndEnd.'<div id="event" class="table_group"><h2 id="event_title"><a href="'.$g_root_path.'/adm_program/modules/dates/dates.php?id='.$date->getValue('dat_id').'&amp;view_mode=html&view=detail&amp;headline='.$date->getValue('dat_headline').'">'.$date->getValue('cat_name').': '.$date->getValue('dat_headline').'</a></h2>'.$timeBegin.'<div>'.$outputLinkLocation.'</div>';
                     }
@@ -744,7 +747,7 @@ else
                     {
                         $columnValues[] = $dateBeginAndEnd.'<div id="event" class="table_group"><h2 id="event_title"><a href="'.$g_root_path.'/adm_program/modules/dates/dates.php?id='.$date->getValue('dat_id').'&amp;view_mode=html&view=detail&amp;headline='.$date->getValue('dat_headline').'">'.$date->getValue('cat_name').': '.$date->getValue('dat_headline').'</a></h2><div>bis '.$date->getValue('dat_end', $gPreferences['system_date']).'<br>'.$outputLinkLocation.'</div>';
                     }
-                    else 
+                    else
                     {
                         $columnValues[] = $dateBeginAndEnd.'<div id="event" class="table_group"><h2 id="event_title"><a href="'.$g_root_path.'/adm_program/modules/dates/dates.php?id='.$date->getValue('dat_id').'&amp;view_mode=html&view=detail&amp;headline='.$date->getValue('dat_headline').'">'.$date->getValue('cat_name').': '.$date->getValue('dat_headline').'</a></h2>'.$timeBegin.'<div>'.$outputLinkLocation.'</div>';
                     }
