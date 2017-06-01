@@ -476,8 +476,12 @@ else
                     // Check limit of participants
                     if($participants->getCount($date->getValue('dat_rol_id')) >= $date->getValue('dat_max_members'))
                     {
-                        $participationPossible = false;
-                    }
+                        //@ptabaden: Only set $participationPossible to false for Members, not for Leaders (May 2017)
+                        if(isLeiter($gCurrentUser->getValue('usr_id'))==false)
+                        {
+                            $participationPossible = false;
+                        }
+		    }
                 }
 
                 if($participationPossible)
